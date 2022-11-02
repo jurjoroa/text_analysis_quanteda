@@ -905,8 +905,6 @@ freq_gen_dfm <- toks_himym_ADJ %>%
 
 df_freq_gen_dfm <-  as.data.frame(textstat_frequency(freq_gen_dfm, n=10, groups = Season_w))
 
-df_freq_gen_dfm
-
 ggplot(df_freq_gen_dfm, aes(x = group, y = frequency, group = feature, color = feature)) +
   geom_line() +
   geom_point()+
