@@ -62,15 +62,14 @@ library(ggsci)
 ```
 # 2. Scraping Wikipedia to get the data
 
-If you don't want to go through this, you might go to the session "3. Uploading data into Quanteda corpus".
-
-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+If you don't want to go through this, you might go to the session "3. Alternatively... import a CSV file!".
 
 **Step 2.1** Scrap XXXXXXXXXX to get the episodes transcriptions.
 
 ```{r, message=F}
 
 datalist_himym <- readtext::readtext("texts/how-i-met-your-mother/*.txt")
+paste("CHECK WITH JORGE WHERE DID HE TAKE THE EPISODES TRANSCRIPTS")
 
 ```
 
@@ -78,6 +77,8 @@ datalist_himym <- readtext::readtext("texts/how-i-met-your-mother/*.txt")
 **Step 2.2 ** Scrap Wikipedia to get the episodes and characters metadata and clean it!
 
 ```{r, message=F}
+
+### CHECK WITH JORGE WHERE DID HE TAKE THE EPISODES TRANSCRIPTS
 
 url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
 
@@ -156,15 +157,31 @@ df_himym_final_doc <- full_join(as.data.frame(datalist_himym_w), df_himym_final,
 
 ## Final dataframe to be used as a corpus text
 
-df_himym_final_doc
+#df_himym_final_doc
+#write.csv(df_himym_final_doc, file = "df_himym_final_doc.csv")
 
 ```
 
-# 3. Uploading data into Quanteda corpus
+# 3. Alternatively... import the CSV files!
+
+If you went through session 2, you already get the data raw and can jump to session "4. Uploading data into Quanteda corpus"
+
+**Step 3.1** Import the csv database
+
+```{r, message=F}
+# We need to think about an offline solution
+#input <- read.csv("XXXXXXX.csv", stringsAsFactors = F)
+
+#df_himym_final_doc <- 
+
+
+```
+
+# 4. Uploading data into Quanteda corpus
 
 OK! It's showtime! Let's upload all our data into a Quanteda corpus element.
 
-**Step 3.1** First Step: Define a corpus
+**Step 4.1** First Step: Define a corpus
 
 ```{r, message=F}
 
@@ -175,7 +192,7 @@ docnames(corp_himym) <- df_himym_final_doc$Title
 summary(corp_himym, n = 15)
 
 ```
-**Step 2.** Convert corpus into tokens and wrangle it
+**Step 4.2** Convert corpus into tokens and wrangle it
 
 ```{r}
 
@@ -188,7 +205,7 @@ corp_himym_cleaned <- tokens(corp_himym, remove_punct = TRUE,
 
 ```
 
-**Step 3.** Create a DFM.
+**Step 4.3** Create a DFM.
 
 ```{r}
 
@@ -209,11 +226,11 @@ dfm_himym_cleaned
 
 ```
 
-# Now... let's have fun!
+# 5. Now... let's have fun!
 
 Now that we already upload the data and created the Quanteda elements, we can try some basics analysis.
 
-**Step 1.** Let's choose a specific season
+**Step 5.1.** Let's choose a specific season
 
 
 ```{r, eval=F}
@@ -242,17 +259,151 @@ dfm_himym_subsetted
 ```
 
 
-**Step 2** XXXXXXXXXXXXXXXXXXXXXXXXXXX`
+**Step 5.2** Do you think we should watch this show in the original sequence? Let's check the similarity between episodes!
 
 
 
 ```{r, eval=F}
-#YYYYYYYYYYYYYYYY
-dfm_himym_subsetted
+### Similarity between episodes
+
+clust <- hclust(as.dist(tstat_simil))
+dclust <- as.dendrogram(clust)
+
+dclust <- reorder(dclust, 1:22)
+
+nodePar <- list(lab.cex = 1, pch = c(NA, 19), 
+                cex.axis=1.5,
+                cex = 2, col = "#0080ff")
+
+#Talk about different methods above the correlation 
+par(mar=c(15,7,2,1))
+
+plot(dclust,nodePar = nodePar,
+     cex.lab=2, cex.axis=2, cex.main=2, cex.sub=2,
+     main="How I Met Your Mother Season 1",
+     type = "triangle",ylim=c(0,1),
+     ylab = "Similarity between episodes (correlation %)",
+     edgePar = list(col = 4:7, lwd = 7:7),
+     panel.first = abline(h=c(seq(.10, 1, .10)), col="grey80"))
+
+rect.hclust(clust, k = 5, border = "#ffb1b1")
 
 ```
 
-**Step 3** XXXXXXXXXXXXXXXXXXXXXXXXXXX`
+**Step 5.3**  Is there a correlation between the episodes?
+
+
+
+```{r, eval=F}
+## Distance between episodes (by correlation)
+
+tstat_dist <- textstat_dist(toks_himym_dm_s1)
+clust_dist <- hclust(as.dist(tstat_dist))
+dclust_dist <- as.dendrogram(clust_dist)
+
+dclust_dist <- reorder(dclust_dist, 22:1)
+
+nodePar_2 <- list(lab.cex = 1.2, pch = c(NA, 19), 
+                  cex = 1.8, col = "#ffc733")
+
+par(mar=c(15,7,2,1))
+
+plot(dclust_dist, nodePar = nodePar_2,
+     cex.lab=2, cex.axis=2, cex.main=2, cex.sub=2,
+     main="How I Met Your Mother Season 1",
+     type = "triangle",ylim=c(0,120),
+     ylab = "Distance between episodes (correlation %)",
+     edgePar = list(col = 18:19, lwd = 7:7),
+     panel.first =abline(h=c(seq(10, 120, 10)), col="grey80"))
+rect.hclust(clust_dist, k = 5, border = "#d80000")
+
+
+```
+
+
+**Step 5.4** What is the main actor for you? Does it depend on the season?
+
+
+
+```{r, eval=F}
+# Appearances of actors by season
+
+## Characters by season
+
+toks_himym <- tokens(corp_himym, remove_punct = TRUE,
+                     remove_separators = TRUE, 
+                     remove_numbers = TRUE, 
+                     remove_symbols = TRUE) %>%
+  tokens_remove(stopwords("english"))#Add additional words
+
+df_actors <- toks_himym %>% tokens_select(c("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother")) %>%
+  tokens_group(groups = Season) %>% 
+  dfm()
+
+
+df_final_actors <-  as.data.frame(textstat_frequency(df_actors, groups = c(1:9)))
+
+ggplot(df_final_actors, aes(x = group, y = frequency, group = feature, color = feature)) +
+  geom_line() +
+  geom_point() +
+  ylim(0,580)
+
+
+```
+```{r, eval=F}
+# Let's try a different aproach!
+
+## Wordcloud of principal characters that appears in HIMYM
+
+toks_himym_characters <- tokens(corp_himym, remove_punct = TRUE,
+                                remove_separators = TRUE, 
+                                remove_numbers = TRUE, 
+                                remove_symbols = TRUE) %>% 
+  tokens_keep(c(unique(df_characters_w$name)))
+
+dfm_general_characters <- toks_himym_characters %>%
+  dfm()
+
+
+textplot_wordcloud(dfm_general_characters, 
+                   random_order = FALSE, 
+                   rotation = 0.25,
+                   min_count = 1, #Minimum frequency
+                   color = RColorBrewer::brewer.pal(4, "Dark2"))
+
+```
+
+**Step 5.5** What is the most important secondary characters that appears in the TV show?
+
+
+
+```{r, eval=F}
+## Wordcloud of secondary characters that appears in HIMYM 
+
+
+toks_himym_sec_characters <- tokens(corp_himym, 
+                                    remove_punct = TRUE,
+                                    remove_separators = TRUE, 
+                                    remove_numbers = TRUE, 
+                                    remove_symbols = TRUE) %>% 
+  tokens_keep(c(unique(df_characters_w$name))) %>% 
+  tokens_remove(c("Ted", "Barney", "Lily", "Robin", "Marshall"))
+
+dfm_general_sec_characters <- toks_himym_sec_characters %>%
+  dfm()
+
+textplot_wordcloud(dfm_general_sec_characters, 
+                   random_order = FALSE, 
+                   rotation = 0.25,
+                   #comparison = TRUE,
+                   labelsize = 1.5,
+                   min_count = 1, #Minimum frequency
+                   color = RColorBrewer::brewer.pal(8, "Spectral"))
+
+
+```
+
+**Step 1** XXXXXXXXXXXXXXXXXXXXXXXXXXX`
 
 
 
@@ -268,16 +419,6 @@ ThWWWWWWWWWWWWWWWWWWWW
 
 
 **Step 1** XXXXXXXXXXXXXXXXXXXXXXXXXXX`
-
-
-
-```{r, eval=F}
-#YYYYYYYYYYYYYYYY
-
-
-```
-
-**Step 2** XXXXXXXXXXXXXXXXXXXXXXXXXXX`
 
 
 
