@@ -41,13 +41,13 @@ knitr::include_graphics("images/himym.png")
 
 AXXXXXXXXXXXXXXXXXXXXXX
 
-# Welcome to our tutorial about the Quanteda package!
+# 1. Welcome to our tutorial about the Quanteda package!
 
 YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
 
 
 
-**Step 1.** Load the packages which we will use (don't forget to install it before!).
+**Step 1** Load the packages which we will use (don't forget to install it before!).
 ```{r, message=F}
 library(readtext)
 library(tidyverse)
@@ -60,13 +60,13 @@ library(spacyr)
 library(xml2)
 library(ggsci)
 ```
-# Scraping Wikipedia to get the data
+# 2. Scraping Wikipedia to get the data
 
-If you don't want to go through this, you might go to the session "ZZZZZZZZZZZZZZZ".
+If you don't want to go through this, you might go to the session "3. Uploading data into Quanteda corpus".
 
 ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 
-**Step 1.** Scrap XXXXXXXXXX to get the episodes transcriptions.
+**Step 2.1** Scrap XXXXXXXXXX to get the episodes transcriptions.
 
 ```{r, message=F}
 
@@ -75,7 +75,7 @@ datalist_himym <- readtext::readtext("texts/how-i-met-your-mother/*.txt")
 ```
 
 
-**Step 2.** Scrap Wikipedia to get the episodes and characters metadata and clean it!
+**Step 2.2 ** Scrap Wikipedia to get the episodes and characters metadata and clean it!
 
 ```{r, message=F}
 
@@ -160,11 +160,11 @@ df_himym_final_doc
 
 ```
 
-# Uploading data into Quanteda corpus
+# 3. Uploading data into Quanteda corpus
 
 OK! It's showtime! Let's upload all our data into a Quanteda corpus element.
 
-**Step 1.** First Step: Define a corpus
+**Step 3.1** First Step: Define a corpus
 
 ```{r, message=F}
 
@@ -200,6 +200,15 @@ tstat_dist <- textstat_dist(dfm_himym_cleaned)
 
 ```
 
+
+Let's check the new subsetted DFM
+
+
+```{r, eval=F}
+dfm_himym_cleaned
+
+```
+
 # Now... let's have fun!
 
 Now that we already upload the data and created the Quanteda elements, we can try some basics analysis.
@@ -208,8 +217,27 @@ Now that we already upload the data and created the Quanteda elements, we can tr
 
 
 ```{r, eval=F}
-#Adjust this code to filter the DFM and not the corpus
-corp_himym_s1 <- corpus_subset(dfm_himym_cleaned, Season == 1)
+# Filter corpus and create a subset DFM.
+
+Season_choice <- 1
+
+corpus_subset <- corpus_subset(corp_himym, Season == Season_choice)
+
+tokens_himym_cleaned <- tokens(corpus_subset, remove_punct = TRUE,
+                        remove_separators = TRUE, 
+                        remove_numbers = TRUE, 
+                        remove_symbols = TRUE) %>%
+  tokens_remove(stopwords("english"))
+
+dfm_himym_subsetted <- tokens_himym_cleaned %>% dfm()
+
+```
+
+Let's check the new subsetted DFM
+
+
+```{r, eval=F}
+dfm_himym_subsetted
 
 ```
 
@@ -220,7 +248,7 @@ corp_himym_s1 <- corpus_subset(dfm_himym_cleaned, Season == 1)
 
 ```{r, eval=F}
 #YYYYYYYYYYYYYYYY
-
+dfm_himym_subsetted
 
 ```
 
