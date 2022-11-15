@@ -195,9 +195,10 @@ rect.hclust(clust_dist, k = 5, border = "red")
 
 ```{r, eval=F}
 # 07.- Appearances of actors by season------------------------------------------
+
 ## 07.01.- Characters by season--------------------------------------------------
 #Remember our second step: tokenize our corpus. 
-toks_himym <- tokens(corp_himym, #corpus from all the episodes from the first season
+toks_himym <- tokens(corp_himym, #corpus from all the episodes from all season
                      remove_punct = TRUE, #Remove punctuation of our texts
                      remove_separators = TRUE,  #Remove separators of our texts
                      remove_numbers = TRUE, #Remove numbers of our texts
@@ -208,12 +209,17 @@ dfm_actors <- toks_himym %>%
   tokens_select(c("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother")) %>% #We just want to analyze these characters
   tokens_group(groups = Season) %>% #We group our tokens (scripts) by season
   dfm() #Transform the token into a DFM object
+  
+  
 ## 07.02.- textstat_frequency function------------------------------------------
 df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9))) %>% 
                     mutate(Season = paste("Season", group),
                            `Principal Characters` = replace(feature, is.character(feature), str_to_title(feature))) %>% 
                     select(-feature)
+                    
+                    
 ## 07.03.- Plot frequency of actors--------------------------------------------
+#We now use ggplot to visualize the frequency of the actors 
 ggplot1 <- ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
   geom_line(size = 1.5) +
   scale_color_manual(values = brewer.pal(n = 6, name = "Dark2")) +
@@ -245,7 +251,7 @@ ggdraw(ggplot1) + draw_image(obj_img, x = .97, y = .97,
 RColorBrewer::brewer.pal(n = 7, name = "Set1")
 ```
 
-**Step 5.5** What is the most frequent characters that appears in the TV show?
+**Step 5.5** What is the most frequent character that appears in the TV show?
 
 
 
@@ -307,7 +313,9 @@ textplot_wordcloud(dfm_general_sec_characters,
 
 
 ```{r, eval=F}
-# How the characters are related each other? 
+# How are the characters related each other? 
+# We can answer this question with network plots and use quanteda for it
+
 ## 11.01.- Network steps------------------------------------------------------
 ### 11.01.01.- Second step: Tokens----------------------------------------------
 token_characters_himym <- tokens(corp_himym, #corpus from all the episodes from all season
@@ -319,7 +327,9 @@ token_characters_himym <- tokens(corp_himym, #corpus from all the episodes from 
   tokens_tolower() #We want lower cases in our tokens
 ### 11.01.02.- Extra step: create a feature co-ocurrence matrix (FCM)------------
 fcm_characters_himym <- token_characters_himym %>%
-                        fcm(context = "window", window = 5, tri = FALSE)
+                        fcm(context = "window", window = 5, tri = FALSE) # Window is a variable for the size of a window on either side of the target feature
+                       #if tri = TRUE it would only return the upper triangle
+                       
 ## 11.02.- Network plot of all characters----------------------------------------
 #Vector with all the characters
 v_top_characters <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym, 70)))
