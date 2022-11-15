@@ -178,7 +178,8 @@ v_chapter <- as.numeric(stringi::stri_extract_last_regex(df_texts_himym$doc_id, 
 df_texts_himym_w <- df_texts_himym %>% mutate(Season = v_season, Chapter = v_chapter)
 
 df_himym_final_doc <- full_join(as.data.frame(df_texts_himym_w), df_himym_final, by = c("Season", "Chapter")) %>% 
-  mutate(Season_w = paste("Season", Season))
+  mutate(Season_w = paste("Season", Season),
+         Title_season = paste0(Title, " S", Season, " EP", Chapter))
 
 
 # 05.- Final dataframe to be used as a corpus text -----------------------------

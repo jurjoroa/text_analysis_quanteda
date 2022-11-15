@@ -35,6 +35,7 @@ library(stringr)
 library(spacyr)
 library(ggsci)
 library(ggrepel)
+library(RColorBrewer)
 
 ## 01.01- Load data- -----------------------------------------------------------
 
@@ -56,10 +57,16 @@ summary(corp_himym, n = 15)
 
 # 03.- Second step: Convert corpus into tokens and wrangle it ------------------
 
+corp_himym_stat <- corp_himym
 
-corp_himym_s1 <- corpus_subset(corp_himym, Season == 1) #We want to analyze just the first season
+docnames(corp_himym_stat) <- df_himym_final_doc$Title_season
 
-toks_himym_s1 <- tokens(corp_himym_s1, #corpus from all the episodes from the first season
+
+corp_himym_s1_simil <- corpus_subset(corp_himym_stat, Season == 1) #We want to analyze just the first season
+
+
+
+toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from the first season
                         remove_punct = TRUE, #Remove punctuation of our texts
                         remove_separators = TRUE, #Remove separators of our texts
                         remove_numbers = TRUE, #Remove numbers of our texts
@@ -99,14 +106,16 @@ par(mar = c(15, 7, 2, 1))
 
 #Plot dendogram
 plot(dclust, nodePar = nodePar,
+     las = 1,
      cex.lab = 2, cex.axis = 2, cex.main = 2, cex.sub = 2,
      main = "How I Met Your Mother Season 1",
-     type = "triangle",ylim=c(0,1),
+     type = "triangle",
+     ylim = c(0,1),
      ylab = "Similarity between episodes (correlation %)",
      edgePar = list(col = 4:7, lwd = 7:7),
      panel.first = abline(h = c(seq(.10, 1, .10)), col = "grey80"))
 
-rect.hclust(clust, k = 5, border = "#ffb1b1")
+rect.hclust(clust, k = 5, border = "red")
 
 
 # 06.- Distance between episodes (by correlation) ------------------------------
@@ -120,7 +129,7 @@ dclust_dist <- as.dendrogram(clust_dist)
 dclust_dist <- reorder(dclust_dist, 22:1)
 
 nodePar_2 <- list(lab.cex = 1.2, pch = c(NA, 19), 
-                  cex = 1.8, col = "#ffc733")
+                  cex = 1.8, col = 11)
 
 ## 06.02.- Plot Distance between episodes (by correlation)----------------------
 
@@ -131,9 +140,10 @@ plot(dclust_dist, nodePar = nodePar_2,
      main = "How I Met Your Mother Season 1",
      type = "triangle", ylim = c(0, 120),
      ylab = "Distance between episodes (correlation %)",
-     edgePar = list(col = 18:19, lwd = 7:7),
+     edgePar = list(col = 11:19, lwd = 7:7),
      panel.first = abline(h = c(seq(10, 120, 10)), col = "grey80"))
-rect.hclust(clust_dist, k = 5, border = "#d80000")
+
+rect.hclust(clust_dist, k = 5, border = "red")
 
 
 
@@ -159,15 +169,35 @@ dfm_actors <- toks_himym %>%
 
 ## 07.02.- textstat_frequency function------------------------------------------
 
-df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9)))
+df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9))) %>% 
+                    mutate(Season = paste("Season", group),
+                           `Principal Characters` = replace(feature, is.character(feature), str_to_title(feature))) %>% 
+                    select(-feature)
 
 ## 07.03.- tPlot frequency of actors--------------------------------------------
 
-ggplot(df_final_actors, aes(x = group, y = frequency, group = feature, color = feature)) +
-  geom_line() +
-  geom_point() +
-  ylim(0,580)
+library(gridExtra)
+library(grid)
+library(extrafont) 
+library()
 
+extrafont::choose_font("serif")
+
+ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
+  geom_line(size = 1.5) +
+  scale_color_manual(values = brewer.pal(n = 6, name = "Dark2")) +
+  geom_point(size = 3.2) +
+  scale_y_continuous(breaks = seq(0, 5600, by = 50), limits = c(0,560))+
+  theme_bw(base_size = 13) +
+  labs(x = "Number of Season",
+       y = "Frequencies of appreances",
+       title = "Appearances of principal characters by Season in HIMYM",
+       caption="Correlation Analysis")+
+       theme(panel.grid.major=element_line(colour="#cfe7f3"),
+             panel.grid.minor=element_line(colour="#cfe7f3"),
+             text=element_text(family="sans"))
+
+RColorBrewer::brewer.pal(n = 7, name = "Set1")
 
 
 # 08.- Wordcloud of PRINCIPAL characters that appears in HIMYM------------------
