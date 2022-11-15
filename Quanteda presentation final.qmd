@@ -1,0 +1,451 @@
+---
+title: "How we met Quanteda"
+subtitle: "Analyzing the TV show 'How I Met Your Mother' with quanteda"
+author: 
+  - name: Jorge Roa
+  - name: Augusto Fonseca
+  - name: Alexander Kraess
+margin-header: hertie_logo.png
+opts_chunk: 
+  R.options:
+        width: 10
+#title-slide-attributes: 
+#  data-background-size: 10%
+#  data-background-position: 100% 100%
+#  data-background-image: HCC-HD.png
+format:
+    revealjs:
+      title-slide-attributes: 
+       data-background-image: images/quanteda.svg
+       data-background-size: 15%
+       data-background-position: 2% 2%
+       data-background-color: steelblue
+       color: #517699;
+      slide-number: c/t
+      multiplex: true
+      width: 1600
+      height: 750
+      logo: images/hertie_logo.png
+      footer: "Quanteda"
+      css: [assets/syntax-highlight.css, assets/custom.css, assets/pacman.css]
+      transition: fade
+      bibliography: bibliography/references.bib
+      transition-speed: fast
+      margin-bottom: 1px
+      theme: default
+      fontcolor: white
+      echo: true
+highlight-style: "dracula"
+      #{style="float:right;text-align:right;"} For specific
+---
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 2.5em;"}
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1em;"}
+
+**What is quanteda and what do we need it for?**
+
+::: columns
+::: {.column width="50%"}
+-   Quanteda is an R package for managing and analyzing textual data.
+-   Developed by Kenneth Benoit, Kohei Watanabe, and other contributors.
+-   Oficial information about the package: [Quanteda](http://quanteda.io/) webpage
+-   Also available on [CRAN](https://cran.r-project.org/web/packages/quanteda/index.html)
+
+![](images/quanteda.svg){fig-align="center" height="80"}
+:::
+
+::: {.column width="50%"}
+::: {layout-ncol="2"}
+![](https://easydrawingguides.com/wp-content/uploads/2020/08/Open-Book-Step-10.png){height="10"}
+
+![](https://www.waseda.jp/inst/wias/assets/uploads/2018/11/d2a2527386ba3abfc7d314f5b582e3cd-610x409.jpg){fig-align="center" height="200"}
+:::
+:::
+:::
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 2.5em;"}
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+**What is quanteda and what do we need it for?**
+
+::: columns
+::: {.column width="50%"}
+-   [**The world of data has experienced unprecedented growth.**]{.underline}
+
+    -   Text data has also increased with time, so its analysis and processing represent a great opportunity.
+    -   Political speeches, texts, social media, messages, digitalization of old texts.
+
+</brxsmall>
+
+-   **Natural Language Processing (NLP)**
+
+    -   NLP: the way computers read text and imitate human language.
+
+    -   We can apply NLP techinques with quanteda: more easy to do research. (Tokenization, Stopwords, and part of speeches)
+:::
+
+::: {.column width="50%"}
+-   **`Quanteda` is a package that gives you the power of process, wrangle and analyze text in multiple ways.**
+
+    -   It's easy to use and the applications that has are enormous.
+
+    -   Quantitative and Qualitative Analysis: best of both worlds in one single package.
+
+    -   Text analysis: best way to do it.
+
+![](https://media0.giphy.com/media/ofrkfuqsR8mvm/giphy.gif?cid=ecf05e47u9so735gxv9gsqec2jombn6idy6qrkczmfn89che&rid=giphy.gif&ct=g){fig-align="center" height="200"}
+
+
+:::
+:::
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1em;"}
+
+**What do we need Quanteda for?**
+
+::: columns
+::: {.column width="50%"}
+A lot of data is in text form, many tools convert audios into text and there is a lot of text data on webpages and social media.
+
+-   Social science:
+
+    -   Analysis of political speeches.
+    -   Theory building and testing thorugh text analysis [@MACANOVIC2022102784].
+:::
+
+::: {.column width="50%"}
+
+![](images/text_cases.png){fig-align="center" height="460"}
+:::
+:::
+
+<center>💣 **The power of Quanteda allow us to do multiple analysis in different areas** 💣</center>
+
+
+# What do you need to always remeber about quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+
+# What do you need to always remeber about quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+**Three things**
+
+::: columns
+::: {.column width="50%"}
+
+<hr class="rounded">
+</hr>
+
+📖 1.-Corpus: the original data that will be pre-processed and analyzed.
+
+🛠 2.-Tokens: Tokenization storing the words of our texts for further analysis.
+
+📑 3.-Document Feature Matrix (DFM): helps us analyze and store the features of a text.
+
+<hr class="rounded">
+</hr>
+
+-   📚 Text files: Quanteda uses `readtext`package. We can read .txt, .csv, .tab, .json. files.
+
+      -   Even, we can read .pdf, .doc and .docx files.
+      
+      -   Amazing, right? For our tutorial, we will use txt files. 
+      
+      
+
+:::
+
+::: {.column width="50%"}
+
+![](images/workflow.png){fig-align="center" height="460"}
+:::
+:::
+
+
+# 🧙 Corpus {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+
+# 🧙 Corpus {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+**Important things:**
+
+::: columns
+::: {.column width="50%"}
+
+<hr class="rounded">
+</hr>
+
+-   📚 We can create a corpus from:
+
+      -   Character vectors   `c()`
+      
+      -   🖼 Dataframes that contain one column with a string or a text to be analyzed.
+      
+       -   ⛔ IMPORTANT ⛔: your string variable of your df must be name as **text**
+      
+      -   SimpleCorpus from `tm` package. 
+      
+     
+<hr class="rounded">
+</hr>
+
+Here you can appreciate with our exercises what we can obtain. 
+
+1.-**Text**: Name of our document. In our case, the names are the episodes titles of HIMYM.
+
+2.-**Types**: Different types of features that we can wrangle.
+      
+:::
+
+::: {.column width="50%"}
+
+
+
+3.-**Tokens**: Number of tokens that our documents have.
+
+4.-**Sentences**: Number of sentences per document. In our case, TV scripts. 
+
+5.-**Chapter** and **No.overall** are variables that we added. We will explain that later.
+
+
+![](images/corpus.png){fig-align="center" height="260"}
+:::
+:::
+
+
+
+
+# 🪆 Tokens {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+
+# 🪆 Tokens {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+**Important things:**
+
+::: columns
+::: {.column width="50%"}
+
+<hr class="rounded">
+</hr>
+
+Tokens are just characters that segments texts into tokens (mainly words or sentences) by word boundaries.
+
+-   📚 What a token object contains:
+
+      - Documents and docvars with the split of them into small units: words.  
+      
+-   😎 Why tokenization is awesome?
+
+-   You have functions like 
+
+      - `remove_separators`
+      - `remove_numbers`
+      - `remove_symbols`
+
+     
+<hr class="rounded">
+</hr>
+
+
+:::
+
+::: {.column width="50%"}
+
+<center>
+
+Here you can appreciate with our exercises what we can obtain. 
+
+You can see the words that are separated.
+
+</center>
+
+
+![](images/tokens.png){fig-align="center" height="260"}
+:::
+:::
+
+
+
+
+# 📜 Document Feature Matrix {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+
+![](https://media2.giphy.com/media/gNzDiRiZS3SXS/giphy.gif?cid=ecf05e47qvtq57n8sujf7fe8zfpkgywmq2vltwqvpxr0dlwv&rid=giphy.gif&ct=g){height="260"}
+
+
+# 📜 Document Feature Matrix (DFM) {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+**Important things:**
+
+::: columns
+::: {.column width="50%"}
+
+<hr class="rounded">
+</hr>
+
+DFM objects are super useful because we can do stats with them and analysis in general. 
+
+-   📜 What a DFM object contains:
+
+      - A matrix is a 2 dimensional array with m rows, and n columns.  
+      
+      - In a dfm each row represents a document, and each column represents a feature.
+      
+      - Enables us to identify the most frequent features of a document.
+
+      - Analyzes text based on the “bag of words” model.
+     
+<hr class="rounded">
+</hr>
+
+
+:::
+
+::: {.column width="50%"}
+
+<center>
+
+Here you can appreciate with our exercises what we can obtain. 
+
+You can see the features.
+
+</center>
+
+
+![](images/dfm.png){fig-align="center" height="200"}
+:::
+:::
+
+
+# ⌛ Workflow {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+
+# ⌛ Workflow {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+![**Source: our amazing classmates from the MDS 2023: Laura Menicacci & Dinah Rabe**](images/magicworkflow.png){fig-align="center" height="500"}
+
+
+# Packages for the analysis {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+
+
+
+<center>
+
+```{r, eval = FALSE}
+#| class-source:  height_chunk_bg_blue
+#| classes:  height_chunk_bg_blue
+
+library(tidyverse)
+library(quanteda)
+library(rvest)
+library(quanteda.textstats)
+library(quanteda.textplots)
+library(stringr)
+library(spacyr)
+library(xml2)
+library(ggsci)
+```
+
+</center>
+
+::: incremental
+::: columns
+::: {.column width="50%"}
+-   ![](https://tidyverse.tidyverse.org/articles/tidyverse-logo.png){fig-align="center" height="70"} **Tidyverse**: set of pacakges that will help us to wrangle our objetcs, dataframes, plots, etc. (Amazing tool)
+
+-   ![](https://www.cssatlse.com/images/quanteda.png){fig-align="center" height="30"} **Quanteda**: set of pacakges that will help us to wrangle our objetcs, dataframes, plots, etc. (Amazing tool)
+
+-   ![](https://rvest.tidyverse.org/logo.png){fig-align="center" height="70"} **Rvest**: set of pacakges that will help us to wrangle our objetcs, dataframes, plots, etc. (Amazing tool)
+:::
+
+::: {.column width="50%"}
+-   ![](https://stringr.tidyverse.org/logo.png){fig-align="center" height="70"} **stringr**: set of pacakges that will help us to wrangle our objetcs, dataframes, plots, etc. (Amazing tool)
+
+-   ![](https://yjunechoe.github.io/posts/2020-06-25-indexing-tip-for-spacyr/preview.png){fig-align="center" height="30"} **spacyr**: set of pacakges that will help us to wrangle our objetcs, dataframes, plots, etc. (Amazing tool)
+:::
+:::
+:::
+
+# Let's start {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.5em;"}
+
+![](https://media3.giphy.com/media/xnNKRYdeemYi4/giphy.gif?cid=ecf05e47ueaba5lvfpep5evcnun2myllhnx26vj707in4zoe&rid=giphy.gif&ct=g){fig-align="center" height="400"}
+
+# Agenda for review {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1em;"}
+
+::: incremental
+-   1
+
+-   2
+
+-   3
+:::
+
+# Web scraping 🏗️ {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.5em;"}
+
+# Web scraping 🏗️ {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;"}
+
+::: columns
+::: {.column width="50%"}
+```{r, eval = FALSE}
+#| class-source:  height_auto
+#| classes:  height_auto
+
+url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
+
+url_himym_characters <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"
+
+l_tables_himym <- url_himym %>% 
+                   read_html() %>% 
+                   html_nodes("table") %>% 
+                   html_table(fill = TRUE)
+
+#This generates a list with all the tables that contain the page. In our case, 
+#we want the table from the second element till the 10th. 
+l_tables_himym <- l_tables_himym[c(2:10)]
+
+#Reduce the list in one data frame since all of the tables share the same structure 
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+
+#We do the same for the characters of HIMYM
+l_tables_himym_characters <- url_himym_characters %>% 
+                             read_html() %>% 
+                             html_nodes("table") %>% 
+                             html_table(fill = TRUE)
+
+df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
+                 select(Character)
+
+df_characters_w <- df_characters %>% 
+  filter(!stringr::str_starts(Character, "Futu"),
+         !(Character %in% c("Character", "Main Characters", "Supporting Characters"))) %>% 
+  mutate(name = str_extract(Character,"([^ ]+)"),
+         name = replace(name, name == "Dr.", "Sonya"))
+```
+
+-   First step: we must download the TV show scripts. For that, we have multiple options, but one efficient way to do it is by applying some web scrap techniques to obtain our texts and other relevant information.
+:::
+
+::: {.column width="50%"}
+-   This chunk of code shows how we can retrieve data from the internet. For our purpose, we will use [Sprigfield](springfieldspringfield.co.uk) webpage. Here, you can download the original TV scripts from multiple shows; in our case, we will download the How I Met Your Mother scripts.
+
+```{r, eval = FALSE}
+#| class-source:  height_auto
+#| classes:  height_auto
+
+#Reduce the list in one data frame since all of the tables share the same structure 
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+
+#We do the same for the characters of HIMYM
+l_tables_himym_characters <- url_himym_characters %>% 
+                             read_html() %>% 
+                             html_nodes("table") %>% 
+                             html_table(fill = TRUE)
+
+df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
+                 select(Character)
+
+df_characters_w <- df_characters %>% 
+  filter(!stringr::str_starts(Character, "Futu"),
+         !(Character %in% c("Character", "Main Characters", "Supporting Characters"))) %>% 
+  mutate(name = str_extract(Character,"([^ ]+)"),
+         name = replace(name, name == "Dr.", "Sonya"))
+```
+:::
+:::
