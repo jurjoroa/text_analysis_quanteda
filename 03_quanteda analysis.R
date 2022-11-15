@@ -182,13 +182,6 @@ df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9)
 
 ## 07.03.- tPlot frequency of actors--------------------------------------------
 
-library(gridExtra)
-library(grid)
-library(extrafont) 
-library()
-
-extrafont::choose_font("serif")
-
 ggplot1 <- ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
   geom_line(size = 1.5) +
   scale_color_manual(values = brewer.pal(n = 6, name = "Dark2")) +
