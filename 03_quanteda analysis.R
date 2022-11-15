@@ -36,6 +36,10 @@ library(spacyr)
 library(ggsci)
 library(ggrepel)
 library(RColorBrewer)
+library(cowplot)
+library(magick) 
+
+obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
 
 ## 01.01- Load data- -----------------------------------------------------------
 
@@ -183,19 +187,35 @@ library()
 
 extrafont::choose_font("serif")
 
-ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
+ggplot1 <- ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
   geom_line(size = 1.5) +
   scale_color_manual(values = brewer.pal(n = 6, name = "Dark2")) +
   geom_point(size = 3.2) +
   scale_y_continuous(breaks = seq(0, 5600, by = 50), limits = c(0,560))+
-  theme_bw(base_size = 13) +
+  theme_minimal(base_size = 14) +
   labs(x = "Number of Season",
        y = "Frequencies of appreances",
-       title = "Appearances of principal characters by Season in HIMYM",
-       caption="Correlation Analysis")+
+       title = "Appearances of principal characters by Season",
+       caption="Description: This plot show the number of times that the \n principal characters appears in HIMYM per season.")+
        theme(panel.grid.major=element_line(colour="#cfe7f3"),
              panel.grid.minor=element_line(colour="#cfe7f3"),
-             text=element_text(family="sans"))
+             plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+             #axis.text.x=element_text(size=15),
+             #axis.text.y=element_text(size=15),
+             plot.caption=element_text(size=12, hjust=.1, color="#939393"),
+             legend.position="bottom",
+             plot.margin = margin(t = 20,  # Top margin
+                                  r = 50,  # Right margin
+                                  b = 40,  # Bottom margin
+                                  l = 10), # Left margin
+             text=element_text(family="sans")) + 
+#geom_segment(aes(x = 8.5, y = 75, xend = 8.8, yend = 70),
+#             arrow = arrow(length = unit(0.1, "cm")))+
+  guides(colour = guide_legend(ncol = 6))
+
+ggdraw(ggplot1) + draw_image(obj_img, x = .97, y = .97, 
+                               hjust = 1.1, vjust = .7, 
+                               width = 0.11, height = 0.1)
 
 RColorBrewer::brewer.pal(n = 7, name = "Set1")
 
