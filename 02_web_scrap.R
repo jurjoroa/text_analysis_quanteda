@@ -57,7 +57,7 @@ html_url_scrape <- rvest_himym %>% read_html(v_url)
 
 node_selector <- ".season-episode-title"
 
-directory_path <- paste("prueba/", v_tv_show, sep="")
+directory_path <- paste(getwd(), "/texts/how-i-met-your-mother/", v_tv_show, sep="")
 
 ## 02.02.-Loop for download TV scripts-------------------------------------------
 
