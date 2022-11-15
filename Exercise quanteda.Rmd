@@ -98,7 +98,7 @@ summary(corp_himym, n = 15)
 ```{r}
 # 03.- Second step: Convert corpus into tokens and wrangle it ------------------
 corp_himym_stat <- corp_himym
-docnames(corp_himym_stat) <- df_himym_final_doc$Title_season
+docnames(corp_himym_stat) <- df_himym_final_doc$Title_season #The names of the different documents in the corpus will be the names of the episodes
 corp_himym_s1_simil <- corpus_subset(corp_himym_stat, Season == 1) #We want to analyze just the first season
 toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from the first season
                         remove_punct = TRUE, #Remove punctuation of our texts
@@ -146,6 +146,7 @@ dclust <- reorder(dclust, 1:22) #Order our visualization
 nodePar <- list(lab.cex = 1, pch = c(NA, 19), 
                 cex.axis = 1.5,
                 cex = 2, col = "#0080ff")
+                
 ## 04.02.- Plot Similarity between episodes--------------------------------------------
 #Talk about different methods above the correlation 
 par(mar = c(15, 7, 2, 1))
@@ -201,7 +202,7 @@ toks_himym <- tokens(corp_himym, #corpus from all the episodes from the first se
                      remove_separators = TRUE,  #Remove separators of our texts
                      remove_numbers = TRUE, #Remove numbers of our texts
                      remove_symbols = TRUE) %>% #Remove symbols of our texts
-  tokens_remove(stopwords("english")) #Add additional words
+  tokens_remove(stopwords("english")) #remove further stopwords
 #Remember our third step: DFM object
 dfm_actors <- toks_himym %>% 
   tokens_select(c("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother")) %>% #We just want to analyze these characters
