@@ -81,18 +81,29 @@ paste("CHECK WITH JORGE WHERE DID HE TAKE THE EPISODES TRANSCRIPTS")
 ### CHECK WITH JORGE WHERE DID HE TAKE THE EPISODES TRANSCRIPTS
 
 url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
-
 url_himym_characters <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"
-
 l_tables_himym <- url_himym %>% 
-  read_html() %>% 
-  html_nodes("table") %>% 
-  html_table(fill = TRUE)
-l_tables_himym
+                   read_html() %>% 
+                   html_nodes("table") %>% 
+                   html_table(fill = TRUE)
 #This generates a list with all the tables that contain the page. In our case, 
 #we want the table from the second element till the 10th. 
 l_tables_himym <- l_tables_himym[c(2:10)]
-
+#Reduce the list in one data frame since all of the tables share the same structure 
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+#We do the same for the characters of HIMYM
+l_tables_himym_characters <- url_himym_characters %>% 
+                             read_html() %>% 
+                             html_nodes("table") %>% 
+                             html_table(fill = TRUE)
+df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
+                 select(Character)
+df_characters_w <- df_characters %>% 
+  filter(!stringr::str_starts(Character, "Futu"),
+         !(Character %in% c("Character", "Main Characters", "Supporting Characters"))) %>% 
+  mutate(name = str_extract(Character,"([^ ]+)"),
+         name = replace(name, name == "Dr.", "Sonya"))
+         
 
 
 #Data cleaning to obtain clean tables
