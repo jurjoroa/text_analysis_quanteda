@@ -396,7 +396,7 @@ ggplot2 <- ggplot(df_freq_gen_dfm_final, aes(x = group, y = frequency, group = W
                              r = 50,  # Right margin
                              b = 40,  # Bottom margin
                              l = 10), # Left margin
-        text=element_text(family="sans")) + 
+        text=element_text()) + 
   #geom_segment(aes(x = 8.5, y = 75, xend = 8.8, yend = 70),
   #             arrow = arrow(length = unit(0.1, "cm")))+
   guides(colour = guide_legend(ncol = 4)) +
@@ -433,7 +433,9 @@ token_characters_himym <- tokens(corp_himym, #corpus from all the episodes from 
 fcm_characters_himym <- token_characters_himym %>%
                         fcm(context = "window", window = 5, tri = FALSE)
 
+## 11.02.- Network plot of all characters----------------------------------------
 
+#Vector with all the characters
 v_top_characters <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym, 70)))
 
 set.seed(100)
@@ -444,6 +446,51 @@ textplot_network(fcm_select(fcm_characters_himym, v_top_characters),
                  vertex_labelcolor = "#006fba", 
                  omit_isolated = TRUE,
                  min_freq = .1)
+
+
+## 11.03.- Network plot with 30 principal characters----------------------------
+
+#Vector with 30 characters
+v_top_characters_2 <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym, 30)))
+
+textplot_network(fcm_select(fcm_characters_himym, v_top_characters_2),
+                 edge_color = "#008eed", 
+                 edge_size = 5, 
+                 vertex_labelcolor = "#006fba",
+                 omit_isolated = TRUE,
+                 min_freq = .1)
+
+
+## 11.03.- Network plot of Ted -------------------------------------------------
+
+fcm_characters_himym_ted <- token_characters_himym %>%
+  tokens_remove(c("marshall", "lily", "barney", "robin")) %>% #Here we just want ted, that why we remove the other principal characters
+  fcm(context = "window", window = 5, tri = FALSE)
+
+#Vector with 30 characters
+v_top_characters_3 <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym_ted, 30)))
+
+#Create a FCM matrix with our characters
+vertex_size_f <- fcm_select(fcm_characters_himym_ted, pattern = v_top_characters_3)
+
+#Create a proportion 
+v_proportion <- rowSums(vertex_size_f)/min(rowSums(vertex_size_f))
+
+#Vector of Ted
+x_p <- c("ted")
+
+#Replace that proportion in our vector
+final_v <- replace(v_proportion, names(v_proportion) %in% x_p, 
+                   v_proportion[names(v_proportion) %in% x_p]/15)
+
+textplot_network(fcm_select(fcm_characters_himym_ted, v_top_characters_3),
+                 edge_color = "#008eed", 
+                 edge_size = 5, 
+                 vertex_labelcolor = "#006fba",
+                 omit_isolated = TRUE,
+                 vertex_labelsize = final_v,
+                 min_freq = .1)
+
 
 # 12.- Text stat collocation ---------------------------------------------------
 
@@ -464,43 +511,41 @@ himym_s1_collocations <-textstat_collocations(toks_himym_s1, #Our token object
 
 
 df_himym_s1_coll <- data.frame(himym_s1_collocations) %>% 
-                        rename(total = count)
+                        rename(`Total of collocations` = count)
 
 ## 12.02.- Plot allocations --------------------------------------
 
-ggplot(df_himym_s1_coll, aes(x = z, y = lambda, label = collocation)) +
-  geom_point(alpha = 0.3, aes(size = total))+
+ggplot3 <- ggplot(df_himym_s1_coll, aes(x = z, y = lambda, label = collocation)) +
+  geom_point(alpha = 0.2, aes(size = `Total of collocations`), color = "#00578a")+
   geom_point(data = df_himym_s1_coll %>% filter(z > 15), 
-             aes(x = z, y = lambda, size = total),
-             color = 'red') + 
-  geom_point(data = df_himym_s1_coll %>% filter(z > 9 & lambda >= 10), 
-             aes(x = z, y = lambda, size = total,
-                 color = 'red')) +
-  geom_point(data = df_himym_s1_coll %>% filter(lambda > 12), 
-             aes(x = z, y = lambda, size = total,
-                 color = 'red')) +
-  geom_point(data = df_himym_s1_coll %>% filter(lambda > 7 & z > 11), 
-             aes(x = z, y = lambda, size = total,
-                 color = 'red')) +
+             aes(x = z, y = lambda, size = `Total of collocations`),
+             color = '#00578a') + 
   geom_text_repel(data = df_himym_s1_coll %>% filter(z > 15), #Function from ggrepel package. Show scatterplots with text.
                   aes(label = collocation, size = count), size = 3,
                   box.padding = unit(0.35, "lines"),
                   point.padding = unit(0.3, "lines")) + 
-  geom_text_repel(data = df_himym_s1_coll %>% filter(z > 9 & lambda >= 10),
-                  aes(label = collocation, size = count), size = 3,
-                  box.padding = unit(0.35, "lines"),
-                  point.padding = unit(0.3, "lines"),
-                  max.overlaps = 50 ) + 
-  geom_text_repel(data = df_himym_s1_coll %>% filter(lambda > 13),
-                  aes(label = collocation, size = count),
-                  size = 3, box.padding = unit(0.35, "lines"),
-                  point.padding = unit(1.35, "lines"), nudge_x = .15,
-                  max.overlaps = 50) + 
-  geom_text_repel(data = df_himym_s1_coll %>% filter(lambda > 7 & z > 11),
-                  aes(label = collocation, size = count),
-                  size = 3, box.padding = unit(0.35, "lines"),
-                  point.padding = unit(1.35, "lines"), nudge_x = .15,
-                  max.overlaps = 50)
+  scale_y_continuous(breaks = seq(0, 16, by = 1), limits = c(0,16))+
+  theme_minimal(base_size = 14) +
+  labs(x = "Z statistic",
+       y = "Lambda",
+       title = "Allocations of words in the first season",
+       caption = "Description: This plot identifies and scores multi-word expressions of the 1st season")+
+  theme(panel.grid.major = element_line(colour = "#cfe7f3"),
+        panel.grid.minor = element_line(colour = "#cfe7f3"),
+        plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+        #axis.text.x=element_text(size=15),
+        #axis.text.y=element_text(size=15),
+        plot.caption = element_text(size=12, hjust=.1, color="#939393"),
+        legend.position="bottom",
+        plot.margin = margin(t = 20,  # Top margin
+                             r = 50,  # Right margin
+                             b = 10,  # Bottom margin
+                             l = 10))
+
+ggdraw(ggplot3) + draw_image(obj_img, x = .97, y = .97, 
+                             hjust = 1.1, vjust = .7, 
+                             width = 0.11, height = 0.1)
+
 
 #lambda collocation scoring metric
 #array data is simply the number of times a given value appears
@@ -636,19 +681,45 @@ df_sentiment_himym <- convert(dfm_sentiment_himym, "data.frame") %>%
   gather(positive.word, negative.word, key = "Polarity", value = "Words") %>% 
   rename(Title = doc_id) %>% 
   mutate(Title = as_factor(Title)) %>% 
-  left_join(df_title_s_chp, by ="Title") 
+  left_join(df_title_s_chp, by ="Title") %>%
+  mutate(Polarity = replace(Polarity, is.character(Polarity), 
+                            str_replace_all(Polarity, 
+                                            pattern = "negative.word",
+                                            replacement = "Negative words")),
+         Polarity = replace(Polarity, is.character(Polarity), 
+                            str_replace_all(Polarity, 
+                                            pattern = "positive.word",
+                                            replacement = "Positive words")))
 
 ## 14.06.- Plot total of positive and negative words per season and episode -----
 
-
-ggplot(df_sentiment_himym, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
+ggplot3 <- ggplot(df_sentiment_himym, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
   geom_bar(stat = 'identity', position = position_dodge(), size = 1) + 
   facet_wrap(~ Season_w)+
-  scale_fill_brewer(palette = "Set1") + 
-  ggtitle("Raw number of words bad/good") + 
-  xlab("")
+  scale_fill_manual(values = c("#c6006f", "#004383")) + 
+  scale_y_continuous(breaks = seq(0, 250, by = 50))+
+  theme_minimal(base_size = 14) +
+  labs(x = "Episodes",
+       y = "Frequency of words",
+       title = "Total of positve and negative words per season",
+       caption="Description: This plot identifies total of positive and negative words \n per season and episode")+
+  theme(panel.grid.major = element_line(colour="#cfe7f3"),
+        panel.grid.minor = element_line(colour="#cfe7f3"),
+        plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+        #axis.text.x=element_text(size=15),
+        #axis.text.y=element_text(size=15),
+        plot.caption = element_text(size = 12, hjust = .1, color = "#939393"),
+        legend.position = "bottom",
+        plot.margin = margin(t = 20,  # Top margin
+                             r = 50,  # Right margin
+                             b = 10,  # Bottom margin
+                             l = 10))
 
-## 14.07.- Weight the feature frequencies in a dfm -----------------------------
+ggdraw(ggplot3) + draw_image(obj_img, x = .97, y = .97, 
+                             hjust = 1.1, vjust = .7, 
+                             width = 0.11, height = 0.1)
+
+x## 14.07.- Weight the feature frequencies in a dfm -----------------------------
 
 #dfm_weight()
 
@@ -664,17 +735,45 @@ df_sentiment_himym_prop <- convert(dfm_sentiment_himym_prop, "data.frame") %>%
   gather(positive.word, negative.word, key = "Polarity", value = "Words") %>% 
   rename(Title = doc_id) %>% 
   mutate(Title = as_factor(Title)) %>% 
-  left_join(df_title_s_chp, by ="Title") 
+  left_join(df_title_s_chp, by = "Title") %>%
+  mutate(Polarity = replace(Polarity, is.character(Polarity), 
+                            str_replace_all(Polarity, 
+                                            pattern = "negative.word",
+                                            replacement = "Negative words")),
+         Polarity = replace(Polarity, is.character(Polarity), 
+                            str_replace_all(Polarity, 
+                                            pattern = "positive.word",
+                                            replacement = "Positive words")))
 
 ### 14.07.02.- Plot total of positive and negative words per season and episode -----
 
 #This step is the same as the last one, but here we are taking into account the weights to do a fair comparison
-ggplot(df_sentiment_himym_prop, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
+
+ggplot4 <- ggplot(df_sentiment_himym_prop, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
   geom_bar(stat = 'identity', position = position_dodge(), size = 1) + 
-  facet_wrap(~ Season_w)+
-  scale_fill_brewer(palette = "Set1") + 
-  ggtitle("Raw number of words bad/good") + 
-  xlab("")
+  facet_wrap(~ Season_w) +
+  scale_fill_manual(values = c("#c6006f", "#004383")) + 
+  scale_y_continuous(breaks = seq(0, .8, by = .2))+
+  theme_minimal(base_size = 14) +
+  labs(x = "Episodes",
+       y = "Frequency of words",
+       title = "Weighted positve and negative words per season",
+       caption = "Description: This plot identifies the weighted total of positive and negative words \n per season and episode")+
+  theme(panel.grid.major = element_line(colour = "#cfe7f3"),
+        panel.grid.minor = element_line(colour = "#cfe7f3"),
+        plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+        #axis.text.x=element_text(size=15),
+        #axis.text.y=element_text(size=15),
+        plot.caption = element_text(size = 12, hjust = .1, color = "#939393"),
+        legend.position = "bottom",
+        plot.margin = margin(t = 20,  # Top margin
+                             r = 50,  # Right margin
+                             b = 10,  # Bottom margin
+                             l = 10))
+
+ggdraw(ggplot4) + draw_image(obj_img, x = .97, y = .97, 
+                             hjust = 1.1, vjust = .7, 
+                             width = 0.11, height = 0.1)
 
 
 
@@ -689,17 +788,42 @@ ggplot(df_sentiment_himym_prop, aes(x = Chapter, y = Words, fill = Polarity, gro
 df_sentiment_himym_prop_measure <- convert(dfm_sentiment_himym_prop, "data.frame") %>% 
   rename(Sentiment = positive.word)  %>% rename(Title = doc_id) %>% 
   left_join(df_title_s_chp, by = "Title")  %>%
-  mutate(measure = log((Sentiment + 0.5)/(negative.word+.5)))
+  mutate(measure = log((Sentiment + 0.5)/(negative.word + .5))) %>%
+  select(-Season) %>% 
+  rename(Season = Season_w)
 
 
 ## 14.09.- Plot measure of positivity among season------------------------------
 
 
-ggplot(df_sentiment_himym_prop_measure, aes(x = No.overall, y = measure, 
-                                            color = Season_w, group = Season_w)) +
-  geom_line() +
-  geom_point()
+ggplot5 <- ggplot(df_sentiment_himym_prop_measure, aes(x = No.overall, y = measure, 
+                                            color = Season, group = Season)) +
+  scale_color_manual(values = brewer.pal(n = 9, name = "Set1"))+
+  geom_line(size = 1.5) +
+  geom_point(size = 3.2) + 
+  scale_x_continuous(breaks = seq(0, 208, by = 20))+
+  theme_minimal(base_size = 14) +
+  labs(x = "Number of episode",
+       y = "Rate",
+       title = "Measure of positivity among episodes",
+       caption="Description: This plot shows the positivity rate of every episode")+
+  theme(panel.grid.major = element_line(colour = "#cfe7f3"),
+        panel.grid.minor = element_line(colour = "#cfe7f3"),
+        plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+        plot.caption = element_text(size=12, hjust = .1, color = "#939393"),
+        legend.position = "bottom",
+        plot.margin = margin(t = 20,  # Top margin
+                             r = 50,  # Right margin
+                             b = 40,  # Bottom margin
+                             l = 10), # Left margin
+        text = element_text()) + 
+  guides(colour = guide_legend(ncol = 3)) +
+  geom_hline(yintercept = 0, linetype = "dashed", 
+             color = "red", size = 1)
 
 
+ggdraw(ggplot5) + draw_image(obj_img, x = .97, y = .97, 
+                             hjust = 1.1, vjust = .7, 
+                             width = 0.11, height = 0.1)
 
 
