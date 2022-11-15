@@ -45,6 +45,8 @@ obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
 
 #If you want to know how we generated this data, go to the script 02_web_scrap please
 load("data/df_himym_final_doc.Rdata")
+load("data/df_characters_w.Rdata")
+
 
 # 01.- Quanteda analysis -------------------------------------------------------
 
