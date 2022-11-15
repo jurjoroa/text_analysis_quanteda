@@ -1,0 +1,383 @@
+---
+title: "IDS Workshop - Quanteda"
+subtitle: "How we met Quanteda - Analyzing the TV show ‘How I Met Your Mother’ with quanteda"
+author: "Alexander Kraess, Augusto Fonseca, Jorge Roa"
+date: "21/11/2022"
+output: 
+  html_document:
+    toc: TRUE
+    df_print: paged
+    number_sections: FALSE
+    highlight: tango
+    theme: lumen
+    toc_depth: 3
+    toc_float: true
+    self_contained: false
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+rm(list = ls()) # to clean the workspace
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
+```
+
+------------------------------------------------------------------------
+```{r, fig.align='left', echo=F, out.width = "30%"}
+knitr::include_graphics("images/hertie_logo.png")
+```
+
+
+
+```{r, fig.align='center', echo=F, out.width = "60%"}
+knitr::include_graphics("images/himym.png")
+```
+
+# 1. Welcome the exercises for Quanteda!
+
+Quanteda is a brilliant package, and we hope that we can show you this power fullness! 
+In this session You will practice the basic concepts, some filters and also some visualization features.
+
+Fell free to access our GitHub page (https://github.com/jurjoroa/text_analysis_quanteda) to check our code and other details.
+
+
+**Step 1** Load the packages which we will use (don't forget to install them before!).
+```{r, message=F}
+library(tidyverse)
+library(tidytext)
+library(quanteda)
+library(quanteda.textstats)
+library(quanteda.textplots)
+library(stringr)
+library(spacyr)
+library(ggsci)
+library(ggrepel)
+library(RColorBrewer)
+library(cowplot)
+library(magick)
+library(gghighlight)
+library(readtext)
+library(rvest)
+library(xml2)
+library(polite)
+library(httr) #Package for working with HTTP organised by HTTP verbs 
+```
+
+# 2. We will skip the scraping part and will directly jump to our data. You can load the data from our github-repository
+
+If you went through session 2, you already get the data raw and can jump to session "4. Uploading data into Quanteda corpus"
+
+**Step 2.1** Load the files
+
+```{r, message=F}
+## 03.1- Load data- -----------------------------------------------------------
+#If you want to know how we generated this data, go to the session 2 (or even the script 02_web_scrap)
+load("data/df_himym_final_doc.Rdata")
+load("data/df_characters_w.Rdata")
+
+
+```
+
+# 3. Uploading data into Quanteda corpus
+
+OK! It's showtime! Let's upload all our data into a Quanteda corpus element.
+
+**Step 3.1** First Step: Define a corpus
+
+```{r, message=F}
+# 01.- Quanteda analysis -------------------------------------------------------
+# 02.- First step: Define a corpus ---------------------------------------------
+corp_himym <- corpus(df_himym_final_doc)  #Build a new corpus from the texts
+docnames(corp_himym) <- df_himym_final_doc$Title
+summary(corp_himym, n = 15)
+```
+**Step 3.2** Convert corpus into tokens and wrangle it
+
+```{r}
+# 03.- Second step: Convert corpus into tokens and wrangle it ------------------
+corp_himym_stat <- corp_himym
+docnames(corp_himym_stat) <- df_himym_final_doc$Title_season
+corp_himym_s1_simil <- corpus_subset(corp_himym_stat, Season == 1) #We want to analyze just the first season
+toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from the first season
+                        remove_punct = TRUE, #Remove punctuation of our texts
+                        remove_separators = TRUE, #Remove separators of our texts
+                        remove_numbers = TRUE, #Remove numbers of our texts
+                        remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_remove(stopwords("english")) #Remove stop words of our texts
+```
+
+**Step 3.3** Create a DFM.
+
+```{r}
+# 03.- Third step: Convert our tokens into a Document Feature Matrix -----------
+toks_himym_dm_s1 <- toks_himym_s1 %>% 
+                    dfm()
+```
+
+
+Let's check the new subsetted DFM
+
+
+```{r, eval=F}
+toks_himym_dm_s1
+```
+
+# 4. Now... let's have fun!
+
+Now that we already upload the data and created the Quanteda elements, we can try some basics analysis.
+
+
+
+**Step 4.1** Have you ever thought that you had seen an episode before? 
+Let's check the similarity between episodes!
+
+
+
+```{r, eval=F}
+# 05.- Similarity between episodes --------------------------------------------
+## 05.01.- textstat_simil function- --------------------------------------------
+tstat_simil <- textstat_simil(toks_himym_dm_s1) #Check similarity between episodes of the first season
+clust <- hclust(as.dist(tstat_simil)) #Convert our object into a cluster (For visualization purposes)
+dclust <- as.dendrogram(clust)  #Convert our cluster into a dendogram (For visualization purposes)
+dclust <- reorder(dclust, 1:22) #Order our visualization
+#Seetle colors
+nodePar <- list(lab.cex = 1, pch = c(NA, 19), 
+                cex.axis = 1.5,
+                cex = 2, col = "#0080ff")
+## 04.02.- Plot Similarity between episodes--------------------------------------------
+#Talk about different methods above the correlation 
+par(mar = c(15, 7, 2, 1))
+#Plot dendogram
+plot(dclust, nodePar = nodePar,
+     las = 1,
+     cex.lab = 2, cex.axis = 2, cex.main = 2, cex.sub = 2,
+     main = "How I Met Your Mother Season 1",
+     type = "triangle",
+     ylim = c(0,1),
+     ylab = "Similarity between episodes (correlation %)",
+     edgePar = list(col = 4:7, lwd = 7:7),
+     panel.first = abline(h = c(seq(.10, 1, .10)), col = "grey80"))
+rect.hclust(clust, k = 5, border = "red")
+```
+
+**Step 4.3**  Is there a correlation between the episodes?
+
+
+
+```{r, eval=F}
+# 06.- Distance between episodes (by correlation) ------------------------------
+## 06.01.- textstat_dist function- ---------------------------------------------
+tstat_dist <- textstat_dist(toks_himym_dm_s1)
+clust_dist <- hclust(as.dist(tstat_dist))
+dclust_dist <- as.dendrogram(clust_dist)
+dclust_dist <- reorder(dclust_dist, 22:1)
+nodePar_2 <- list(lab.cex = 1.2, pch = c(NA, 19), 
+                  cex = 1.8, col = 11)
+## 06.02.- Plot Distance between episodes (by correlation)----------------------
+par(mar = c(15,7,2,1))
+plot(dclust_dist, nodePar = nodePar_2,
+     cex.lab = 2, cex.axis = 2, cex.main = 2, cex.sub = 2,
+     main = "How I Met Your Mother Season 1",
+     type = "triangle", ylim = c(0, 120),
+     ylab = "Distance between episodes (correlation %)",
+     edgePar = list(col = 11:19, lwd = 7:7),
+     panel.first = abline(h = c(seq(10, 120, 10)), col = "grey80"))
+rect.hclust(clust_dist, k = 5, border = "red")
+```
+
+
+**Step 4.4** What is the main actor for you? Does it depend on the season?
+
+
+
+```{r, eval=F}
+# 07.- Appearances of actors by season------------------------------------------
+## 07.01.- Characters by season--------------------------------------------------
+#Remember our second step: tokenize our corpus. 
+toks_himym <- tokens(corp_himym, #corpus from all the episodes from the first season
+                     remove_punct = TRUE, #Remove punctuation of our texts
+                     remove_separators = TRUE,  #Remove separators of our texts
+                     remove_numbers = TRUE, #Remove numbers of our texts
+                     remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_remove(stopwords("english")) #Add additional words
+#Remember our third step: DFM object
+dfm_actors <- toks_himym %>% 
+  tokens_select(c("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother")) %>% #We just want to analyze these characters
+  tokens_group(groups = Season) %>% #We group our tokens (scripts) by season
+  dfm() #Transform the token into a DFM object
+## 07.02.- textstat_frequency function------------------------------------------
+df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9))) %>% 
+                    mutate(Season = paste("Season", group),
+                           `Principal Characters` = replace(feature, is.character(feature), str_to_title(feature))) %>% 
+                    select(-feature)
+## 07.03.- Plot frequency of actors--------------------------------------------
+ggplot1 <- ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
+  geom_line(size = 1.5) +
+  scale_color_manual(values = brewer.pal(n = 6, name = "Dark2")) +
+  geom_point(size = 3.2) +
+  scale_y_continuous(breaks = seq(0, 5600, by = 50), limits = c(0,560))+
+  theme_minimal(base_size = 14) +
+  labs(x = "Number of Season",
+       y = "Frequencies of appreances",
+       title = "Appearances of principal characters by Season",
+       caption="Description: This plot show the number of times that the \n principal characters appears in HIMYM per season.")+
+       theme(panel.grid.major=element_line(colour="#cfe7f3"),
+             panel.grid.minor=element_line(colour="#cfe7f3"),
+             plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+             #axis.text.x=element_text(size=15),
+             #axis.text.y=element_text(size=15),
+             plot.caption=element_text(size=12, hjust=.1, color="#939393"),
+             legend.position="bottom",
+             plot.margin = margin(t = 20,  # Top margin
+                                  r = 50,  # Right margin
+                                  b = 40,  # Bottom margin
+                                  l = 10), # Left margin
+             text=element_text(family="sans")) + 
+#geom_segment(aes(x = 8.5, y = 75, xend = 8.8, yend = 70),
+#             arrow = arrow(length = unit(0.1, "cm")))+
+  guides(colour = guide_legend(ncol = 6))
+ggdraw(ggplot1) + draw_image(obj_img, x = .97, y = .97, 
+                               hjust = 1.1, vjust = .7, 
+                               width = 0.11, height = 0.1)
+RColorBrewer::brewer.pal(n = 7, name = "Set1")
+```
+
+**Step 5.5** What is the most frequent characters that appears in the TV show?
+
+
+
+```{r, eval=F}
+# 08.- Wordcloud of PRINCIPAL characters that appears in HIMYM------------------
+## 08.01.- Wordcloud steps------------------------------------------------------
+### 08.01.01.- Second step: Tokens----------------------------------------------
+toks_himym_characters <- tokens(corp_himym, #corpus from all the episodes from all season
+                                remove_punct = TRUE, #Remove punctuation of our texts
+                                remove_separators = TRUE, #Remove separators of our texts
+                                remove_numbers = TRUE, #Remove numbers of our texts
+                                remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_keep(c(unique(df_characters_w$name))) #This function allow us to keep just the tokens that we want. 
+#In this case, we just want the characters.
+### 08.01.02.- Third step: DFM object-------------------------------------------
+dfm_general_characters <- toks_himym_characters %>%
+                          dfm()
+## 08.02.- Generate Wordcloud --------------------------------------------------
+textplot_wordcloud(dfm_general_characters, 
+                   rotation = 0.25,
+                   font = "sans",
+                   min_count = 1, #Minimum frequency
+                   color = brewer.pal(11, "RdBu"))
+#RColorBrewer::display.brewer.all()
+```
+
+**Step 4.6** What about the SECONDARY characters?
+
+
+
+```{r, eval=F}
+# 09.- Wordcloud of SECONDARY characters that appears in HIMYM------------------
+## 09.01.- Wordcloud steps------------------------------------------------------
+### 09.01.01.- Second step: Tokens----------------------------------------------
+toks_himym_sec_characters <- tokens(corp_himym, #corpus from all the episodes from all season
+                                    remove_punct = TRUE, #Remove punctuation of our texts
+                                    remove_separators = TRUE, #Remove separators of our texts
+                                    remove_numbers = TRUE, #Remove numbers of our texts
+                                    remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_keep(c(unique(df_characters_w$name))) %>% #We want to keep all the characters
+  tokens_remove(c("Ted", "Barney", "Lily", "Robin", "Marshall")) #But we remove the principal characters
+### 09.01.02.- Third step: DFM object-------------------------------------------
+dfm_general_sec_characters <- toks_himym_sec_characters %>%
+                              dfm()
+## 09.02.- Generate Wordcloud --------------------------------------------------
+textplot_wordcloud(dfm_general_sec_characters, 
+                   random_order = FALSE, 
+                   rotation = 0.25,
+                   #comparison = TRUE,
+                   labelsize = 1.5,
+                   min_count = 1, #Minimum frequency
+                   color = RColorBrewer::brewer.pal(8, "Spectral"))
+```
+
+# 6. Network plots
+
+**Step 6.1** Network plot
+
+
+
+```{r, eval=F}
+# How the characters are related each other? 
+## 11.01.- Network steps------------------------------------------------------
+### 11.01.01.- Second step: Tokens----------------------------------------------
+token_characters_himym <- tokens(corp_himym, #corpus from all the episodes from all season
+                                 remove_punct = TRUE, #Remove punctuation of our texts
+                                 remove_separators = TRUE, #Remove separators of our texts
+                                 remove_numbers = TRUE, #Remove numbers of our texts
+                                 remove_symbols = TRUE) %>%  #Remove symbols of our texts
+  tokens_keep(c(unique(df_characters_w$name))) %>% #We want to keep all the characters
+  tokens_tolower() #We want lower cases in our tokens
+### 11.01.02.- Extra step: create a feature co-ocurrence matrix (FCM)------------
+fcm_characters_himym <- token_characters_himym %>%
+                        fcm(context = "window", window = 5, tri = FALSE)
+## 11.02.- Network plot of all characters----------------------------------------
+#Vector with all the characters
+v_top_characters <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym, 70)))
+set.seed(100)
+textplot_network(fcm_select(fcm_characters_himym, v_top_characters),
+                 edge_color = "#008eed", 
+                 edge_size = 2, 
+                 vertex_labelcolor = "#006fba", 
+                 omit_isolated = TRUE,
+                 min_freq = .1)
+```
+
+
+**Step 6.2** Network plot with 30 principal characters
+
+
+
+```{r, eval=F}
+## 11.03.- Network plot with 30 principal characters----------------------------
+#Vector with 30 characters
+v_top_characters_2 <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym, 30)))
+textplot_network(fcm_select(fcm_characters_himym, v_top_characters_2),
+                 edge_color = "#008eed", 
+                 edge_size = 5, 
+                 vertex_labelcolor = "#006fba",
+                 omit_isolated = TRUE,
+                 min_freq = .1)
+```
+
+
+**Step 6.3** Network plot of Ted
+
+
+
+```{r, eval=F}
+## 11.03.- Network plot of Ted -------------------------------------------------
+fcm_characters_himym_ted <- token_characters_himym %>%
+  tokens_remove(c("marshall", "lily", "barney", "robin")) %>% #Here we just want ted, that why we remove the other principal characters
+  fcm(context = "window", window = 5, tri = FALSE)
+#Vector with 30 characters
+v_top_characters_3 <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym_ted, 30)))
+#Create a FCM matrix with our characters
+vertex_size_f <- fcm_select(fcm_characters_himym_ted, pattern = v_top_characters_3)
+#Create a proportion 
+v_proportion <- rowSums(vertex_size_f)/min(rowSums(vertex_size_f))
+#Vector of Ted
+x_p <- c("ted")
+#Replace that proportion in our vector
+final_v <- replace(v_proportion, names(v_proportion) %in% x_p, 
+                   v_proportion[names(v_proportion) %in% x_p]/15)
+textplot_network(fcm_select(fcm_characters_himym_ted, v_top_characters_3),
+                 edge_color = "#008eed", 
+                 edge_size = 5, 
+                 vertex_labelcolor = "#006fba",
+                 omit_isolated = TRUE,
+                 vertex_labelsize = final_v,
+                 min_freq = .1)
+```
+
+```
+
+
