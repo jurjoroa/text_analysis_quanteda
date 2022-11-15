@@ -244,7 +244,7 @@ textplot_wordcloud(dfm_general_characters,
                    font = "sans",
                    min_count = 1, #Minimum frequency
                    color = brewer.pal(11, "RdBu"))
-RColorBrewer::display.brewer.all()
+#RColorBrewer::display.brewer.all()
 
 
 # 09.- Wordcloud of SECONDARY characters that appears in HIMYM------------------
