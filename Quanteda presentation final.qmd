@@ -320,6 +320,162 @@ You can see the features.
 
 ![**Source: our amazing classmates from the MDS 2023: Laura Menicacci & Dinah Rabe**](images/magicworkflow.png){fig-align="center" height="500"}
 
+# 🏎 Principal functions of Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.3em;"}
+
+# 🏎 Principal functions of Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1em;"}
+
+**Main parts:**
+<hr class="rounded">
+</hr>
+
+Remember that you can use a pipe`%>%`for all the functions of the package. 
+
+First step: `corpus(your_dataframe, text, etc)` = Creates a corpus object from available sources.
+
+Second step: `tokens(your_corpus_object)` = Construct a tokens object.
+
+Third step: `dfm(your_token_object)` = Construct a sparse document-feature matrix, from a character, corpus, tokens, or even other dfm object.
+
+     
+    
+<hr class="rounded">
+</hr>
+
+
+#  🏎 Principal functions of Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1em;"}
+
+<i class = "font_title_2">
+
+**Corpus functions**
+
+</i>
+
+<hr class="rounded">
+</hr>
+
+Remember that you can use a pipe`%>%`for all the functions of the package. 
+
+`docnames(your_corpus)` = rename you docvars. 
+
+`corpus_subset()` = subsets of a corpus that meet certain condition. Like a filter. 
+
+`corpus_group(your_text_object, dataframe, etc)` = Combine documents in a corpus object by a grouping variable.
+
+`corpus_trim(your_text_object, dataframe, etc)` = Removes sentences from a corpus or a character vector shorter than a specified length.
+
+`corpus_segment(your_text_object, dataframe, etc)` = Segment corpus text(s) or a character vector, splitting on a pattern match. 
+
+<hr class="rounded">
+</hr>
+
+
+#  🏎 Principal functions of Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1em;"}
+
+<i class = "font_title_2">
+
+**Token functions**
+
+</i>
+
+<hr class="rounded">
+</hr>
+
+Remember that you can use a pipe`%>%`for all the functions of the package. 
+
+`tokens()` = Construct a tokens object. 
+
+-   `tokens_select(your_token_obj)` = These function select or discard tokens from a tokens object. 
+      - `tokens_remove(your_token_obj)` = Same as tokens select, but we remove words, phrases, etc.
+      - `tokens_keep(your_token_obj)` = Same as tokens select, but we keep words, phrases, etc.
+
+`tokens_group(your_token_obj)` = Combine documents in a tokens object by a grouping variable.
+
+`tokens_tolower(your_token_obj)` = Convert the features of a tokens object and re-index
+the types. All to lower cases.
+
+<hr class="rounded">
+</hr>
+
+
+
+
+#  🏎 Principal functions of Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .9em;"}
+
+<i class = "font_title_2">
+
+**Document Feature Matrix functions**
+
+</i>
+
+<hr class="rounded">
+</hr>
+
+Remember that you can use a pipe`%>%`for all the functions of the package. 
+
+`dfm(your_token_obj)` = Construct a sparse document-feature matrix. 
+
+`dfm_lookup(your_token_obj)` = Apply a dictionary to a dfm by looking up all dfm features for matches.
+
+`dfm_match(your_token_obj)` = Match the feature set of a dfm to a specified vector of feature names. 
+
+`dfm_subset(your_token_obj)` = Returns document subsets of a dfm that meet certain condition
+
+<hr class="rounded">
+</hr>
+
+
+# 🍿 References and resources for this presentation {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .9em;"}
+
+
+![](https://media4.giphy.com/media/ij8RopdwbGab4yd3Oc/giphy.gif?cid=790b7611fa7db739b11bdc2008cd49b2fb0334e9582ebcb3&rid=giphy.gif&ct=g){fig-align="center" height="450"}
+
+
+
+# 🍿 References and resources for this presentation {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;"}
+
+
+::: columns
+::: {.column width="50%"}
+
+-   [Quanteda Webpage](https://quanteda.io/){target="_blank"}
+
+-   [A Beginner’s Guide to Text Analysis with quanteda (University of Virginia)](https://data.library.virginia.edu/a-beginners-guide-to-text-analysis-with-quanteda/){target="_blank"}
+
+-   [Amazing document created by Kenneth Benoi (University of Münster)](https://www.uni-muenster.de/imperia/md/content/ifpol/grasp/2019-06-27_muenster.pdf){target="_blank"}
+
+-   [An Introduction to Text as Data with quanteda (Penn State and Essex courses)](https://burtmonroe.github.io/TextAsDataCourse/Tutorials/TADA-IntroToQuanteda.nb.html){target="_blank"}
+
+-   [Text as Data: quantitative text analysis with R. Data Science Summer School 2022. Hertie School](https://ds3.ai/courses/textasdata.html){target="_blank"}
+
+-   [Quanteda Cheat Sheet](https://muellerstefan.net/files/quanteda-cheatsheet.pdf){target="_blank"}
+
+-   [Advancing Text Mining with R and quanteda: Methods Bites](https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/advancing-text-mining/){target="_blank"}
+
+
+:::
+
+::: {.column width="50%"}
+
+
+-   [Advancing Text Mining: Cornelius Puschmann](http://cbpuschmann.net/quanteda_mzes/){target="_blank"}
+
+-   [Text as data:  Avatar Kenneth Benoit. Director, LSE Data Science Institute](https://gist.github.com/kbenoit){target="_blank"}
+
+-   [Analysis of financial texts using R:  Kohei Watanabe](https://blog.koheiw.net/?p=1687){target="_blank"}
+
+-   [Using quanteda to analyze social media text:  Pablo Barbera](http://pablobarbera.com/text-analysis-vienna/code/03-quanteda-intro.html){target="_blank"}
+
+-   [Quanteda initiative](https://quanteda.org/){target="_blank"}
+
+-   [The 5 Packages You Should Know for Text Analysis with R](https://towardsdatascience.com/r-packages-for-text-analysis-ad8d86684adb){target="_blank"}
+
+:::
+:::
+
+All rights of each image to whom they correspond.
+
+![](https://www.logolynx.com/images/logolynx/4d/4d3e98f7c3a69607414253c54137ac3f.png){fig-align="center" height="50"}
+
 
 # Packages for the analysis {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
 
