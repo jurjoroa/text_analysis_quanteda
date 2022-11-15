@@ -7,7 +7,7 @@
 # First author: Jorge Roa                                                     # 
 # E-mail: jurjoo@gmail.com                                                    #
 # Second author: Augusto Fonseca                                              # 
-# E-mail: a.fonseca@students.hertie-school.org                                #
+# E-mail: cesaraccf@gmail.com                                                 #
 # Third author: Alexander Kraes                                               #
 # E-mail: alexander.kraess@sciencespo.fr                                      #
 #                                                                             # 

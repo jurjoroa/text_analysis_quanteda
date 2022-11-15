@@ -7,7 +7,7 @@
 # First author: Jorge Roa                                                     # 
 # E-mail: jurjoo@gmail.com                                                    #
 # Second author: Augusto Fonseca                                              # 
-# E-mail: a.fonseca@students.hertie-school.org                                #
+# E-mail: cesaraccf@gmail.com                                                 #
 # Third author: Alexander Kraes                                               #
 # E-mail: alexander.kraess@sciencespo.fr                                      #
 #                                                                             # 
@@ -28,6 +28,7 @@ rm(list = ls()) # to clean the workspace
 # 01.- Load librarys -----------------------------------------------------------
 
 library(tidyverse)
+library(tidytext)
 library(quanteda)
 library(quanteda.textstats)
 library(quanteda.textplots)
@@ -54,7 +55,7 @@ load("data/df_characters_w.Rdata")
 
 # 02.- First step: Define a corpus ---------------------------------------------
 
-df_himym_final_doc
+#df_himym_final_doc
 
 corp_himym <- corpus(df_himym_final_doc)  #Build a new corpus from the texts
 
@@ -499,7 +500,7 @@ textplot_network(fcm_select(fcm_characters_himym_ted, v_top_characters_3),
 
 ### 12.01.01.- Second step: Tokens----------------------------------------------
 
-toks_himym_s1 <- tokens(corp_himym_s1, #Define our corpus for the first season
+toks_himym_s1 <- tokens(corp_himym_s1_simil, #Define our corpus for the first season
                         padding = TRUE) %>% #Leave an empty string where the removed tokens previously existed
   tokens_remove(stopwords("english")) #Remove stopwords of our token
 
@@ -719,7 +720,7 @@ ggdraw(ggplot3) + draw_image(obj_img, x = .97, y = .97,
                              hjust = 1.1, vjust = .7, 
                              width = 0.11, height = 0.1)
 
-x## 14.07.- Weight the feature frequencies in a dfm -----------------------------
+## 14.07.- Weight the feature frequencies in a dfm -----------------------------
 
 #dfm_weight()
 
