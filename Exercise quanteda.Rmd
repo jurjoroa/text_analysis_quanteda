@@ -21,7 +21,7 @@ editor_options:
 ```{r setup, include=FALSE}
 rm(list = ls()) # to clean the workspace
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
+
 ```
 
 ------------------------------------------------------------------------
@@ -74,6 +74,7 @@ If you went through session 2, you already get the data raw and can jump to sess
 ```{r, message=F}
 ## 03.1- Load data- -----------------------------------------------------------
 #If you want to know how we generated this data, go to the session 2 (or even the script 02_web_scrap)
+obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
 load("data/df_himym_final_doc.Rdata")
 load("data/df_characters_w.Rdata")
 
