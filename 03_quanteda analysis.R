@@ -37,7 +37,9 @@ library(ggsci)
 library(ggrepel)
 library(RColorBrewer)
 library(cowplot)
-library(magick) 
+library(magick)
+library(gghighlight)
+
 
 obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
 
@@ -180,7 +182,7 @@ df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9)
                            `Principal Characters` = replace(feature, is.character(feature), str_to_title(feature))) %>% 
                     select(-feature)
 
-## 07.03.- tPlot frequency of actors--------------------------------------------
+## 07.03.- Plot frequency of actors--------------------------------------------
 
 ggplot1 <- ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
   geom_line(size = 1.5) +
@@ -238,10 +240,11 @@ dfm_general_characters <- toks_himym_characters %>%
 ## 08.02.- Generate Wordcloud --------------------------------------------------
 
 textplot_wordcloud(dfm_general_characters, 
-                   random_order = FALSE, 
                    rotation = 0.25,
+                   font = "sans",
                    min_count = 1, #Minimum frequency
-                   color = RColorBrewer::brewer.pal(4, "Dark2"))
+                   color = brewer.pal(11, "RdBu"))
+RColorBrewer::display.brewer.all()
 
 
 # 09.- Wordcloud of SECONDARY characters that appears in HIMYM------------------
@@ -339,6 +342,8 @@ df_general_ADJ <- toks_himym_ADJ %>%
 
 ### 10.04.03.- Wordcloud of adjectives -----------------------------------------
 
+#Because of a function limitation, the maximum comparison that we can do is 8 groups
+
 textplot_wordcloud(df_general_ADJ, 
                    random_order = FALSE, 
                    rotation = 0.25,
@@ -347,14 +352,6 @@ textplot_wordcloud(df_general_ADJ,
                    min_count = 1, #Minimum frequency
                    color = ggsci::pal_lancet(palette = "lanonc"))
 #color = RColorBrewer::brewer.pal(10, "Spectral"))
-
-mtext("How I Met Your Mother",
-      side = 1, 
-      line = 1.3, 
-      at = 1, 
-      adj = -.8, 
-      cex = 1.2)
-
 
 ## 10.05.- Get frequency of adjectives------------------------------------------
 
@@ -366,14 +363,51 @@ freq_gen_dfm <- toks_himym_ADJ %>%
 #Generate dataframe
 df_freq_gen_dfm <-  as.data.frame(textstat_frequency(freq_gen_dfm, # Our DFM object
                                                      n = 10, #Number of observations displayed
-                                                     groups = Season_w)) #Grouped by season
+                                                     groups = Season)) #Grouped by season
+                                  
+df_freq_gen_dfm_match <- df_freq_gen_dfm %>% mutate(total = 1) %>% 
+                                  group_by(feature) %>% 
+                                  summarise(total = sum(total)) %>% 
+                                  filter(total== 9)
+
+df_freq_gen_dfm_final <- right_join(df_freq_gen_dfm, df_freq_gen_dfm_match,
+                                   by = "feature") %>% rename(Word = feature) %>% 
+                                   mutate(Word = str_to_title(Word))
 
 ### 10.05.02.- Plot frequency of adjectives-------------------------------------
 
-ggplot(df_freq_gen_dfm, aes(x = group, y = frequency, group = feature, color = feature)) +
-  geom_line() +
-  geom_point()+
-  labs(x = NULL, y = "Frequency")
+ggplot2 <- ggplot(df_freq_gen_dfm_final, aes(x = group, y = frequency, group = Word, color = Word)) +
+  geom_line(size = 1.5, show.legend = TRUE) +
+  scale_color_manual(values = rev(brewer.pal(n = 7, name = "Dark2"))) +
+  geom_point(size = 3.2) +
+  theme_minimal(base_size = 14) +
+  labs(x = "Number of Season",
+       y = "Frequencies of words",
+       title = "Frequency of adjectives",
+       caption="Description: This plot shows the top adjectives that appears in every season of HIMYM")+
+  theme(panel.grid.major=element_line(colour="#cfe7f3"),
+        panel.grid.minor=element_line(colour="#cfe7f3"),
+        plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+        #axis.text.x=element_text(size=15),
+        #axis.text.y=element_text(size=15),
+        plot.caption=element_text(size=12, hjust=.1, color="#939393"),
+        legend.position="bottom",
+        plot.margin = margin(t = 20,  # Top margin
+                             r = 50,  # Right margin
+                             b = 40,  # Bottom margin
+                             l = 10), # Left margin
+        text=element_text(family="sans")) + 
+  #geom_segment(aes(x = 8.5, y = 75, xend = 8.8, yend = 70),
+  #             arrow = arrow(length = unit(0.1, "cm")))+
+  guides(colour = guide_legend(ncol = 4)) +
+  gghighlight(max(frequency) > 140,
+              keep_scales = TRUE,
+              unhighlighted_params = list(colour = NULL, alpha = 0.2))
+  
+
+ggdraw(ggplot2) + draw_image(obj_img, x = .97, y = .97, 
+                             hjust = 1.1, vjust = .7, 
+                             width = 0.11, height = 0.1)
 
 # 11.- Network plot ------------------
 
