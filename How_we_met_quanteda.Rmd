@@ -1,0 +1,743 @@
+---
+title: "How we met Quanteda"
+subtitle: "Analyzing the TV show 'How I Met Your Mother' with quanteda"
+mainfont: SourceSansPro
+output: 
+  html_document:
+    code_folding: hide
+    toc: TRUE
+    df_print: paged
+    number_sections: FALSE
+    highlight: pygments
+    theme: cerulean
+    toc_depth: 3
+    toc_float: true
+    css: assets/custom_markdown.css 
+    self_contained: false
+    includes:
+      after_body: assets/footer.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+load("data/df_himym_final_doc.Rdata")
+load("data/df_characters_w.Rdata")
+
+```
+
+***
+
+```{r set image, out.width="200px", fig.align = 'center', size = 'tiny', echo=FALSE}
+h_url <- "https://bit.ly/3xWexDQ"
+
+knitr::include_graphics(h_url)
+
+
+
+```
+
+<font size="4">
+
+<center><strong> MSc. Data Science for Public Policy </strong></center>
+
+</font>
+
+------------------------------------------------------------------------
+
+<font size="4">
+
+<center><strong> IDS Workshop 2022 </strong></center>
+
+</font>
+
+------------------------------------------------------------------------
+
+<font size="3">
+
+<center><strong>Introduction to Data Science</strong></center>
+
+</font>
+
+<font size="3">
+
+<center><strong>Professor </strong>: Simon Munzert, PhD.</center>
+
+</font> <font size="3">
+
+</font>
+
+<font size="2">
+
+<center>Students name: <strong>Jorge Roa, Cesar Augusto, Alexander Kraess </strong></center>
+
+</font>
+
+------------------------------------------------------------------------
+
+# 📌 Objective
+
+</br>
+
+This workshop aims to use the incredible `quanteda` package to analyze the television series "How I Met Your Mother" and demonstrate many of the `quanteda` package’s tools. We will explore the characters, identify adjectives, render Wordclouds, network plots and even sentiment analysis. 
+
+------------------------------------------------------------------------
+
+# 🎸 How I Met Your Mother
+
+</br>
+
+```{r himym, out.width="500px", fig.align = 'center', size = 'tiny', echo=FALSE}
+h_url <- "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/BEA544D7476F6C33E23CB73494F462BAF5F9A247B41B335F74094773F4112C03/scale?width=1200&aspectRatio=1.78&format=jpeg"
+
+knitr::include_graphics(h_url)
+```
+
+</br>
+
+<blockquote> Plot: "Ted has fallen in love. It all started when his best friend, Marshall, drops the bombshell that he plans to propose to longtime girlfriend Lily, a kindergarten teacher. Suddenly, Ted realizes that he had better get a move on if he hopes to find true love. Helping him in the quest is Barney, a friend with endless -- often outrageous -- opinions, a penchant for suits and a foolproof way to meet women. When Ted meets Robin, he is sure it's love at first sight, but the affair fizzles into friendship. Voice-over by Bob Saget ("Full House") tells the story through flashbacks."</blockquote>
+
+Source: [Rotten Tomatoes](https://ds3.ai/courses/textasdata.html){target="_blank"}
+
+------------------------------------------------------------------------
+
+## 🎸 Principal Characters
+
+</br>
+
+::: columns
+::: {.column width="20%"}
+
+<center>
+
+```{r, echo=FALSE, out.width="70%", out.height="70%", out.extra='class="myimg"'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Ted_Mosby.jpg/220px-Ted_Mosby.jpg")
+```
+
+Ted
+
+Actor: Josh Radnor
+
+</center>
+
+
+:::
+
+::: {.column width="20%"}
+<center>
+
+```{r, echo=FALSE, out.width="70%", out.height="70%", out.extra='class="myimg"'}
+knitr::include_graphics("https://pbs.twimg.com/media/Ck8_vkfVEAAQldJ.jpg")
+```
+
+Barney
+
+Actor: Neil 
+Patrick Harris
+
+</center>
+:::
+
+::: {.column width="20%"}
+<center>
+
+```{r, echo=FALSE, out.width="70%", out.height="70%", out.extra='class="myimg"'}
+knitr::include_graphics("https://iv1.lisimg.com/image/7068531/740full-robin-scherbatsky.jpg")
+```
+
+Robin
+
+Actor: Cobin Smulders
+
+</center>
+:::
+
+::: {.column width="20%"}
+<center>
+
+```{r, echo=FALSE, out.width="70%", out.height="70%", out.extra='class="myimg"'}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/en/a/a6/Marshall_Eriksen.jpg")
+```
+
+Marshall
+
+Actor: Jason Segel
+
+</center>
+
+
+:::
+
+::: {.column width="20%"}
+<center>
+
+```{r, echo=FALSE, out.width="70%", out.height="70%", out.extra='class="myimg"'}
+knitr::include_graphics("https://cdn.fansshare.com/photo/alysonhannigan/lily-stills-lily-aldrin-alyson-hannigan-1247118600.jpg")
+```
+
+Lily
+
+Actor: Alyson Hannigan
+
+</center>
+:::
+:::
+
+------------------------------------------------------------------------
+
+<blockquote> "The story of five friends sitting in their favorite booth at MacLaren’s, their lives unfolding in front of each other, How I Met Your Mother is heartwarming and hilarious at the same time. Some believe that HIMYM is Ted’s story. Others think that it is Marshall and Lily’s story. And there’s a whole school of thought that it's no one else but Barney’s story. We would like to think that it’s all of their stories because there won’t be a Ted without Barney or a Lily without Marshall, and definitely no Robin without a Ted (and Barney too). That’s how crucial each of the members of this group is, playing a major role in each other’s lives, helping them grow and become what they wanted to be." </blockquote> 
+
+Source: [Collider](https://collider.com/how-i-met-your-mother-cast-and-characters-what-now/){target="_blank"}
+
+------------------------------------------------------------------------
+
+<center>
+
+
+## 🎭 Let's Start
+
+
+![](https://media3.giphy.com/media/xnNKRYdeemYi4/giphy.gif?cid=ecf05e47ueaba5lvfpep5evcnun2myllhnx26vj707in4zoe&rid=giphy.gif&ct=g){fig-align="center" height="300"}
+
+</center>
+------------------------------------------------------------------------
+
+# 📕 Libraries
+
+These will be the libraries we will use for our analysis. In every line, you will find the purpose of it.
+
+```{r libraries, eval = TRUE}
+
+library(readtext) #For import and Handling for Plain and Formatted Text Files.
+library(rvest) #For easily Harvest (Scrape) Web Pages.
+library(xml2) #For working with XML files using a simple, consistent interface.
+library(polite) #For be responsible when scraping data from websites.
+library(httr) #Package for working with HTTP organised by HTTP verbs 
+library(tidyverse) #Opinionated collection of R packages designed for data science.
+library(tidytext) #Functions and supporting data sets to allow conversion of text.
+library(quanteda) #OUR PACKAGE for text analysis. 
+library(quanteda.textstats) #OUR SUBPACKAGE for text statistics. 
+library(quanteda.textplots) #OUR SUBPACKAGE for text plots. 
+library(stringr) #Consistent Wrappers for Common String Operations.
+library(spacyr) #NLP package that comes from Python that help us classify words.
+library(ggsci) #Collection of high-quality color palettes.
+library(ggrepel) # ggrepel provides geoms for ggplot2 to repel overlapping text labels
+library(RColorBrewer) #Beautifull color palettes.
+library(cowplot) #Package to put images in our plots.
+library(magick) #Package for save images in our environment
+library(gghighlight) #gghighlight() adds direct labels for some geoms.
+
+#Set image
+obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
+
+```
+
+# 🧞 Web scrap TV shows scripts
+
+We will do a web scraping of our favorite TV show: “How I Met Your Mother.” For the above, we will do web scraping to obtain the scripts of the 208 episodes that the TV show has. We will define the URLs, obtain the information to know if we can do web scraping, and name the directory where we want to save our files.
+
+## Define URLS and read HTML
+
+</br>
+
+```{r 02.01, eval = FALSE, class.source = "fold-show"}
+
+v_tv_show <- "how-i-met-your-mother"
+
+v_url_web <- "http://www.springfieldspringfield.co.uk/"
+
+#Remember to be polite and know if we can web scrap the webpage
+session_information <- bow(v_url_web) #Do a bow with the polite package
+session_information
+
+v_url <- paste(v_url_web,"episode_scripts.php?tv-show=", v_tv_show, sep="")
+
+#Identify yourself
+rvest_himym <- session(v_url, 
+                       add_headers(`From` = "jurjoo@gmail.com", 
+                                   `UserAgent` = R.Version()$version.string))
+
+#Start web scrap
+html_url_scrape <- rvest_himym %>% read_html(v_url)
+
+node_selector <- ".season-episode-title"
+
+directory_path <- paste("texts/how-i-met-your-mother/", v_tv_show, sep = "")
+
+
+```
+
+------------------------------------------------------------------------
+
+## Loop for download TV scripts
+
+</br>
+
+```{r 02.02.01., eval = FALSE, class.source = "fold-show"}
+
+### 02.02.01.-scrape href nodes in .season-episode-title-------------------------
+
+html_url_all_seasons <- html_nodes(html_url_scrape, node_selector) %>%
+  html_attr("href")
+
+### 02.02.02.-One loop for all our URL's----------------------------------------
+
+for (x in html_url_all_seasons) {
+  read_ur <- read_html(paste(v_url_web, x, sep="/"))
+  
+  Sys.sleep(runif(1, 0, 1)) #Be polite
+  
+  # Element node that was checked and that contain the place of the scripts.
+  selector <- ".scrolling-script-container"
+  # Scrape the text
+  text_html <- html_nodes(read_ur, selector) %>% 
+    html_text()
+  
+  # Last five characters of html_url_all_seasons for saving this to separate text files (This is our pattern).
+  sub_data <- function(x, n) {
+    substr(x, nchar(x) - n + 1, nchar(x))
+  }
+  seasons_final <- sub_data(x, 5)
+  # Write each text file
+  write.csv(text_html, file = paste(directory_path, "_", seasons_final, ".txt", sep=""), row.names = FALSE)
+}
+
+
+```
+
+------------------------------------------------------------------------
+
+# Webscrapp TV Show tables
+
+
+
+------------------------------------------------------------------------
+
+## Information about TV episodes
+
+</br>
+
+```{r 03.01., eval = TRUE, class.source = "fold-show"}
+
+url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
+
+rvest_himym_table <- session(url_himym, 
+                             add_headers(`From` = "jurjoo@gmail.com", 
+                                         `UserAgent` = R.Version()$version.string))
+
+l_tables_himym <- rvest_himym_table %>% 
+  read_html() %>% 
+  html_nodes("table") %>% 
+  html_table(fill = TRUE)
+
+#This generates a list with all the tables that contain the page. In our case, 
+#we want the table from the second element till the 10th. 
+l_tables_himym <- l_tables_himym[c(2:10)]
+
+l_tables_himym[1]
+```
+
+
+
+------------------------------------------------------------------------
+
+### Data cleaning to wrangle html tables (Characters of the TV show)
+
+</br>
+
+```{r 03.01.01, eval = TRUE, class.source = "fold-show"}
+
+#Reduce the list in one data frame since all of the tables share the same structure 
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+
+
+#We do the same for the characters of HIMYM
+url_himym_characters <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"
+
+rvest_himym_table_2 <- session(url_himym_characters, 
+                               add_headers(`From` = "jurjoo@gmail.com", 
+                                           `UserAgent` = R.Version()$version.string))
+
+l_tables_himym_characters <- rvest_himym_table_2 %>% 
+  read_html() %>% 
+  html_nodes("table") %>% 
+  html_table(fill = TRUE)
+
+df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
+  select(Character)
+
+df_characters_w <- df_characters %>% 
+  filter(!stringr::str_starts(Character, "Futu"),
+         !(Character %in% c("Character", "Main Characters", 
+                            "Supporting Characters"))) %>% 
+  mutate(name = str_extract(Character,"([^ ]+)"),
+         name = replace(name, name == "Dr.", "Sonya"))
+
+df_characters_w
+```
+
+------------------------------------------------------------------------
+
+###  Data cleaning to wrangle html tables (Information of the TV Show)
+
+</br>
+
+```{r 03.01.02, eval = TRUE}
+
+
+#We bind the tables with bind_rows
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+
+df_himym_filt <- df_himym %>% filter(str_length(No.overall) < 4)
+
+df_himym_filt_dupl <- df_himym %>% filter(str_length(No.overall) > 4)
+
+#We are doing this particular wrangling to format in the best possible way our tables. 
+
+#Note that we are using stringr to manipulate our characters.
+
+df_himym_filt_dupl_1 <- df_himym_filt_dupl %>% 
+  mutate(No.overall = as.numeric(replace(No.overall, str_length(No.overall) > 4, substr(No.overall, 1, 3))),
+         No..inseason = as.numeric(replace(No..inseason, str_length(No..inseason) > 3, substr(No..inseason, 1, 2))),
+         Prod.code = replace (Prod.code, str_length(Prod.code) > 3, substr(Prod.code, 1, 6)))
+
+df_himym_filt_dupl_2 <- df_himym_filt_dupl %>% 
+  mutate(No.overall = as.numeric(replace(No.overall, str_length(No.overall) > 4, substr(No.overall, 4, 6))),
+         No..inseason = as.numeric(replace(No..inseason, str_length(No..inseason) > 3, substr(No..inseason, 3, 4))),
+         Title = replace(Title, Title == "\"The Magician's Code\"", "\"The Magician's Code Part 2\""),
+         Title = replace(Title, Title == "\"The Final Page\"", "\"The Final Page Part 2\""),
+         Title = replace(Title, Title == "\"Last Forever\"" , "\"Last Forever Part 2\"" ),
+         Prod.code = replace(Prod.code, str_length(Prod.code) > 3, substr(Prod.code, 7, 12)))
+
+df_himym_final <- bind_rows(df_himym_filt, 
+                            df_himym_filt_dupl_1, 
+                            df_himym_filt_dupl_2) %>% 
+  arrange(No.overall, No..inseason) %>% 
+  mutate(year = str_extract(Original.air.date, '[0-9]{4}+'),
+         Season = as.numeric(stringr::str_extract(Prod.code, "^.{1}"))) %>% 
+  rename(Chapter = No..inseason)
+
+df_himym_final$US.viewers.millions. <- as.numeric(str_replace_all(df_himym_final$US.viewers.millions., "\\[[0-9]+\\]", ""))
+
+df_himym_final
+
+```
+
+------------------------------------------------------------------------
+
+##  Load TV scripts and merge tables
+
+</br>
+
+```{r 04.01, eval = TRUE}
+
+df_texts_himym <- readtext::readtext("texts/how-i-met-your-mother/*.txt")
+
+v_season <- as.numeric(stringr::str_extract(df_texts_himym$doc_id, "\\d+"))
+
+v_chapter <- as.numeric(stringi::stri_extract_last_regex(df_texts_himym$doc_id, "[0-9]+"))
+
+df_texts_himym_w <- df_texts_himym %>% mutate(Season = v_season, Chapter = v_chapter)
+
+df_himym_final_doc <- full_join(as.data.frame(df_texts_himym_w), df_himym_final, by = c("Season", "Chapter")) %>% 
+  mutate(Season_w = paste("Season", Season),
+         Title_season = paste0(Title, " S", Season, " EP", Chapter))
+
+df_himym_final_doc
+
+```
+
+Press the arrows in the top right corner of this interactive dataframe. As you can see, we have our final dataframe with the information our our TV show, number of season, episode, etc.
+
+
+------------------------------------------------------------------------
+
+# Quanteda (Corpus, Token and DFM)
+
+
+
+
+------------------------------------------------------------------------
+
+## First step: Define a corpus
+
+</br>
+
+```{r 05.01, eval = TRUE, class.source = "fold-show"}
+
+corp_himym <- corpus(df_himym_final_doc)  #Build a new corpus from the texts
+
+docnames(corp_himym) <- df_himym_final_doc$Title
+
+summary(corp_himym, n = 15)
+
+```
+
+
+------------------------------------------------------------------------
+
+## Second step: Convert corpus into tokens and wrangle it
+
+```{r 05.02, eval = TRUE, class.source = "fold-show"}
+
+corp_himym_stat <- corp_himym
+
+docnames(corp_himym_stat) <- df_himym_final_doc$Title_season
+
+
+corp_himym_s1_simil <- corpus_subset(corp_himym_stat, Season == 1) #We want to analyze just the first season
+
+
+
+toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from the first season
+                        remove_punct = TRUE, #Remove punctuation of our texts
+                        remove_separators = TRUE, #Remove separators of our texts
+                        remove_numbers = TRUE, #Remove numbers of our texts
+                        remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_remove(stopwords("english")) #Remove stop words of our texts
+
+toks_himym_s1
+
+```
+
+
+------------------------------------------------------------------------
+
+## Third step: Convert our tokens into a Document Feature Matrix
+
+</br>
+
+```{r 05.03, eval = TRUE, class.source = "fold-show"}
+
+toks_himym_dm_s1 <- toks_himym_s1 %>% 
+                    dfm() #Convert our tokens into a document feature matrix
+
+toks_himym_dm_s1
+
+```
+
+
+# Quanteda analysis
+
+
+## Similarity between episodes
+
+textstat_simil function
+
+```{r 05.04, eval = FALSE, class.source = "fold-show"}
+
+tstat_simil <- textstat_simil(toks_himym_dm_s1) #Check similarity between episodes of the first season
+
+clust <- hclust(as.dist(tstat_simil)) #Convert our object into a cluster (For visualization purposes)
+
+dclust <- as.dendrogram(clust)  #Convert our cluster into a dendrogram (For visualization purposes)
+
+dclust <- reorder(dclust, 1:22) #Order our visualization
+
+```
+
+```{r 05.04 ploy, eval = FALSE}
+
+#Seetle colors
+nodePar <- list(lab.cex = 1, pch = c(NA, 19), 
+                cex.axis = 1.5,
+                cex = 2, col = "#0080ff")
+
+par(mar = c(18.1, 6, 2, 3))
+
+#Plot dendogram
+plot(dclust, nodePar = nodePar,
+     las = 1,
+     cex.axis = 2, cex.main = 2, cex.sub = 2,
+     main = "How I Met Your Mother Season 1",
+     type = "triangle",
+     ylim = c(0,1),
+     ylab = "",
+     edgePar = list(col = 4:7, lwd = 7:7),
+     panel.first = abline(h = c(seq(.10, 1, .10)), col = "grey80"))
+
+title(ylab = "Similarity between episodes (correlation %)", mgp = c(4, 1, 1), cex.lab = 2)    
+
+rect.hclust(clust, k = 5, border = "red")
+
+```
+
+
+```{r similarity, fig.align = 'center', size = 'tiny', echo=FALSE}
+
+
+knitr::include_graphics("images/similarity.png")
+
+
+
+```
+
+
+
+
+## Distance between episodes
+
+textstat_dist function
+
+```{r 05.06, eval = FALSE, class.source = "fold-show"}
+
+tstat_simil <- textstat_simil(toks_himym_dm_s1) #Check similarity between episodes of the first season
+
+clust <- hclust(as.dist(tstat_simil)) #Convert our object into a cluster (For visualization purposes)
+
+dclust <- as.dendrogram(clust)  #Convert our cluster into a dendrogram (For visualization purposes)
+
+dclust <- reorder(dclust, 1:22) #Order our visualization
+
+```
+
+```{r 05.06 plot, eval = FALSE}
+
+
+par(mar = c(21, 6, 2, 3))
+
+#Plot dendogram
+plot(dclust_dist, nodePar = nodePar_2,
+     las = 1,
+     cex.axis = 2, cex.main = 2, cex.sub = 2,
+     main = "How I Met Your Mother Season 1",
+     type = "triangle",
+     ylim = c(0, 120),
+     ylab = "",
+     edgePar = list(col = 11:19, lwd = 7:7),
+     panel.first = abline(h = c(seq(10, 120, 10)), col = "grey80"))
+
+title(ylab = "Distance between episodes (correlation %)", mgp = c(4, 1, 1), cex.lab = 2)    
+
+rect.hclust(clust, k = 5, border = "red")
+
+```
+
+```{r distance, fig.align = 'center', size = 'tiny', echo=FALSE}
+
+
+knitr::include_graphics("images/distance.png")
+
+
+```
+
+
+
+
+## Appearances of actors by season
+
+```{r 07, eval = TRUE}
+
+#Remember our second step: tokenize our corpus. 
+
+toks_himym <- tokens(corp_himym, #corpus from all the episodes from the first season
+                     remove_punct = TRUE, #Remove punctuation of our texts
+                     remove_separators = TRUE,  #Remove separators of our texts
+                     remove_numbers = TRUE, #Remove numbers of our texts
+                     remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_remove(stopwords("english")) #Add additional words
+
+dfm_actors <- toks_himym %>% 
+  tokens_select(c("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother")) %>% #We just want to analyze these characters
+  tokens_group(groups = Season) %>% #We group our tokens (scripts) by season
+  dfm() #Transform the token into a DFM object
+
+df_final_actors <-  as.data.frame(textstat_frequency(dfm_actors, groups = c(1:9))) %>% 
+                    mutate(Season = paste("Season", group),
+                           `Principal Characters` = replace(feature, is.character(feature), str_to_title(feature))) %>% 
+                    select(-feature)
+
+df_final_actors
+```
+
+
+
+```{r 07.01, eval = TRUE, fig.height=8, fig.width=9}
+
+# Plot frequency of actors
+ggplot1 <- ggplot(df_final_actors, aes(x = group, y = frequency, group = `Principal Characters`, color = `Principal Characters`)) +
+  geom_line(size = 1.5) +
+  scale_color_manual(values = brewer.pal(n = 6, name = "Dark2")) +
+  geom_point(size = 3.2) +
+  scale_y_continuous(breaks = seq(0, 5600, by = 50), limits = c(0,560))+
+  theme_minimal(base_size = 14) +
+  labs(x = "Number of Season",
+       y = "Frequencies of appreances",
+       title = "Appearances of principal characters by Season",
+       caption="Description: This plot show the number of times that the \n principal characters appears in HIMYM per season.")+
+       theme(panel.grid.major=element_line(colour="#cfe7f3"),
+             panel.grid.minor=element_line(colour="#cfe7f3"),
+             plot.title = element_text(margin = margin(t = 10, r = 20, b = 30, l = 30)),
+             #axis.text.x=element_text(size=15),
+             #axis.text.y=element_text(size=15),
+             plot.caption=element_text(size=12, hjust=.1, color="#939393"),
+             legend.position="bottom",
+             plot.margin = margin(t = 20,  # Top margin
+                                  r = 50,  # Right margin
+                                  b = 40,  # Bottom margin
+                                  l = 10), # Left margin
+             text=element_text()) + 
+#geom_segment(aes(x = 8.5, y = 75, xend = 8.8, yend = 70),
+#             arrow = arrow(length = unit(0.1, "cm")))+
+  guides(colour = guide_legend(ncol = 6))
+
+ggdraw(ggplot1) + draw_image(obj_img, x = .97, y = .97, 
+                               hjust = 1.1, vjust = .7, 
+                               width = 0.11, height = 0.1)
+```
+
+## Wordcloud of PRINCIPAL characters that appears in HIMYM
+
+```{r 08, eval = TRUE, class.source = "fold-show"}
+
+#Remember our second step: tokenize our corpus. 
+
+toks_himym_characters <- tokens(corp_himym, #corpus from all the episodes from all season
+                                remove_punct = TRUE, #Remove punctuation of our texts
+                                remove_separators = TRUE, #Remove separators of our texts
+                                remove_numbers = TRUE, #Remove numbers of our texts
+                                remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_keep(c(unique(df_characters_w$name))) #This function allow us to keep just the tokens that we want. 
+
+#In this case, we just want the characters.
+
+toks_himym_characters
+```
+
+```{r 08.0, eval = TRUE, class.source = "fold-show"}
+
+#Remember our second step: tokenize our corpus. 
+
+toks_himym_characters <- tokens(corp_himym, #corpus from all the episodes from all season
+                                remove_punct = TRUE, #Remove punctuation of our texts
+                                remove_separators = TRUE, #Remove separators of our texts
+                                remove_numbers = TRUE, #Remove numbers of our texts
+                                remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_keep(c(unique(df_characters_w$name))) #This function allow us to keep just the tokens that we want. 
+
+#In this case, we just want the characters.
+
+toks_himym_characters
+```
+
+```{r 08.01, eval = TRUE, class.source = "fold-show"}
+
+#Remember our third step: DFM object
+
+dfm_general_characters <- toks_himym_characters %>%
+                          dfm()
+
+
+#In this case, we just want the characters.
+
+toks_himym_characters
+```
+
+```{r 08.01 word, eval = TRUE, class.source = "fold-show", out.height="200%"}
+
+textplot_wordcloud(dfm_general_characters, 
+                   rotation = 0.25,
+                   font = "sans",
+                   min_count = 1, #Minimum frequency
+                   color = brewer.pal(11, "RdBu"))
+```

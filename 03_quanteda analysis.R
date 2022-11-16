@@ -110,51 +110,63 @@ nodePar <- list(lab.cex = 1, pch = c(NA, 19),
 ## 05.02.- Plot Similarity between episodes--------------------------------------------
 
 
+png("images/similarity.png", width = 300, height = 300, units='mm', res = 500)
+
 #Talk about different methods above the correlation 
-par(mar = c(15, 7, 2, 1))
+par(mar = c(18.1, 6, 2, 3))
 
 #Plot dendogram
 plot(dclust, nodePar = nodePar,
      las = 1,
-     cex.lab = 2, cex.axis = 2, cex.main = 2, cex.sub = 2,
+     cex.axis = 2, cex.main = 2, cex.sub = 2,
      main = "How I Met Your Mother Season 1",
      type = "triangle",
      ylim = c(0,1),
-     ylab = "Similarity between episodes (correlation %)",
+     ylab = "",
      edgePar = list(col = 4:7, lwd = 7:7),
      panel.first = abline(h = c(seq(.10, 1, .10)), col = "grey80"))
 
+title(ylab = "Similarity between episodes (correlation %)", mgp = c(4, 1, 1), cex.lab = 2)    
+
 rect.hclust(clust, k = 5, border = "red")
+
+dev.off()
 
 
 # 06.- Distance between episodes (by correlation) ------------------------------
 
 ## 06.01.- textstat_dist function- ---------------------------------------------
 
-tstat_dist <- textstat_dist(toks_himym_dm_s1)
-clust_dist <- hclust(as.dist(tstat_dist))
-dclust_dist <- as.dendrogram(clust_dist)
+tstat_dist <- textstat_dist(toks_himym_dm_s1) #Check distance between episodes of the first season
+clust_dist <- hclust(as.dist(tstat_dist)) #Convert our object into a cluster (For visualization purposes)
+dclust_dist <- as.dendrogram(clust_dist) #Convert our cluster into a dendrogram (For visualization purposes)
 
-dclust_dist <- reorder(dclust_dist, 22:1)
+dclust_dist <- reorder(dclust_dist, 22:1) #Order our visualization
 
 nodePar_2 <- list(lab.cex = 1.2, pch = c(NA, 19), 
                   cex = 1.8, col = 11)
 
 ## 06.02.- Plot Distance between episodes (by correlation)----------------------
 
-par(mar = c(15,7,2,1))
+
+#png("images/distance.png", width = 300, height = 300, units='mm', res = 500)
+
+par(mar = c(21, 6, 2, 3))
 
 plot(dclust_dist, nodePar = nodePar_2,
      cex.lab = 2, cex.axis = 2, cex.main = 2, cex.sub = 2,
      main = "How I Met Your Mother Season 1",
      type = "triangle", ylim = c(0, 120),
-     ylab = "Distance between episodes (correlation %)",
+     ylab = "",
      edgePar = list(col = 11:19, lwd = 7:7),
      panel.first = abline(h = c(seq(10, 120, 10)), col = "grey80"))
+
+title(ylab = "Distance between episodes (correlation %)", mgp = c(4, 1, 1), cex.lab = 2)    
 
 rect.hclust(clust_dist, k = 5, border = "red")
 
 
+#dev.off()
 
 # 07.- Appearances of actors by season------------------------------------------
 
@@ -215,8 +227,6 @@ ggdraw(ggplot1) + draw_image(obj_img, x = .97, y = .97,
                                hjust = 1.1, vjust = .7, 
                                width = 0.11, height = 0.1)
 
-RColorBrewer::brewer.pal(n = 7, name = "Set1")
-
 
 # 08.- Wordcloud of PRINCIPAL characters that appears in HIMYM------------------
 
@@ -240,13 +250,16 @@ dfm_general_characters <- toks_himym_characters %>%
 
 ## 08.02.- Generate Wordcloud --------------------------------------------------
 
+png("images/wordcloud_princ.png", width = 50, height = 50, units='mm', res = 500)
+
 textplot_wordcloud(dfm_general_characters, 
                    rotation = 0.25,
-                   font = "sans",
+                   min_size = 1.4, max_size = 8,
                    min_count = 1, #Minimum frequency
                    color = brewer.pal(11, "RdBu"))
 #RColorBrewer::display.brewer.all()
 
+dev.off()
 
 # 09.- Wordcloud of SECONDARY characters that appears in HIMYM------------------
 
@@ -268,6 +281,9 @@ dfm_general_sec_characters <- toks_himym_sec_characters %>%
                               dfm()
 
 ## 09.02.- Generate Wordcloud --------------------------------------------------
+
+
+#png("images/distance.png", width = 300, height = 300, units='mm', res = 500)
 
 textplot_wordcloud(dfm_general_sec_characters, 
                    random_order = FALSE, 
