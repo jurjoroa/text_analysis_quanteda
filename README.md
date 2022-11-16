@@ -16,53 +16,55 @@ The goals of this session are to (1) equip you with conceptual knowledge about t
 
 ## Instructors
 
-- Simon Munzert ([website](http://simonmunzert.github.io/), [twitter](https://twitter.com/simonsaysnothin))
-- Kermit the Frog ([website](https://en.wikipedia.org/wiki/Kermit_the_Frog), [twitter](https://twitter.com/KermitTheFrog))
+🥋 Jorge Roa [GitHub](https://en.wikipedia.org/wiki/Kermit_the_Frog) | [LinkedIn](https://en.wikipedia.org/wiki/Kermit_the_Frog) | [Twitter](https://en.wikipedia.org/wiki/Kermit_the_Frog)
 
+🥋 Augusto Fonseca [Email](cesaraccf@gmail.com) 
+
+🥋 Alexander Kraess [Email](https://en.wikipedia.org/wiki/Kermit_the_Frog)
 
 ## Further resources
 
--   [Quanteda Webpage](https://quanteda.io/)
+🎯 [Quanteda Webpage](https://quanteda.io/)
 
 
--   [A Beginner’s Guide to Text Analysis with quanteda (University of Virginia)](https://data.library.virginia.edu/a-beginners-guide-to-text-analysis-with-quanteda/)
-
-
-
--   [Amazing document created by Kenneth Benoi (University of Münster)](https://www.uni-muenster.de/imperia/md/content/ifpol/grasp/2019-06-27_muenster.pdf)
+🎯 [A Beginner’s Guide to Text Analysis with quanteda (University of Virginia)](https://data.library.virginia.edu/a-beginners-guide-to-text-analysis-with-quanteda/)
 
 
 
--   [An Introduction to Text as Data with quanteda (Penn State and Essex courses)](https://burtmonroe.github.io/TextAsDataCourse/Tutorials/TADA-IntroToQuanteda.nb.html)
-
-
--   [Text as Data: quantitative text analysis with R. Data Science Summer School 2022. Hertie School](https://ds3.ai/courses/textasdata.html)
+🎯 [Amazing document created by Kenneth Benoi (University of Münster)](https://www.uni-muenster.de/imperia/md/content/ifpol/grasp/2019-06-27_muenster.pdf)
 
 
 
--   [Quanteda Cheat Sheet](https://muellerstefan.net/files/quanteda-cheatsheet.pdf)
+🎯 [An Introduction to Text as Data with quanteda (Penn State and Essex courses)](https://burtmonroe.github.io/TextAsDataCourse/Tutorials/TADA-IntroToQuanteda.nb.html)
+
+
+🎯 [Text as Data: quantitative text analysis with R. Data Science Summer School 2022. Hertie School](https://ds3.ai/courses/textasdata.html)
 
 
 
--   [Advancing Text Mining with R and quanteda: Methods Bites](https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/advancing-text-mining/)
+🎯 [Quanteda Cheat Sheet](https://muellerstefan.net/files/quanteda-cheatsheet.pdf)
 
 
--   [Advancing Text Mining: Cornelius Puschmann](http://cbpuschmann.net/quanteda_mzes/)
+
+🎯 [Advancing Text Mining with R and quanteda: Methods Bites](https://www.mzes.uni-mannheim.de/socialsciencedatalab/article/advancing-text-mining/)
 
 
--   [Text as data:  Avatar Kenneth Benoit. Director, LSE Data Science Institute](https://gist.github.com/kbenoit)
+🎯 [Advancing Text Mining: Cornelius Puschmann](http://cbpuschmann.net/quanteda_mzes/)
 
 
--   [Analysis of financial texts using R:  Kohei Watanabe](https://blog.koheiw.net/?p=1687)
+🎯 [Text as data:  Avatar Kenneth Benoit. Director, LSE Data Science Institute](https://gist.github.com/kbenoit)
 
 
--   [Using quanteda to analyze social media text:  Pablo Barbera](http://pablobarbera.com/text-analysis-vienna/code/03-quanteda-intro.html)
+🎯 [Analysis of financial texts using R:  Kohei Watanabe](https://blog.koheiw.net/?p=1687)
 
 
--   [Quanteda initiative](https://quanteda.org/)
+🎯 [Using quanteda to analyze social media text:  Pablo Barbera](http://pablobarbera.com/text-analysis-vienna/code/03-quanteda-intro.html)
 
 
--   [The 5 Packages You Should Know for Text Analysis with R](https://towardsdatascience.com/r-packages-for-text-analysis-ad8d86684adb)
+🎯 [Quanteda initiative](https://quanteda.org/)
+
+
+🎯 [The 5 Packages You Should Know for Text Analysis with R](https://towardsdatascience.com/r-packages-for-text-analysis-ad8d86684adb)
 
 
 
