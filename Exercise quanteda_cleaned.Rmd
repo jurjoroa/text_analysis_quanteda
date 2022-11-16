@@ -1,0 +1,245 @@
+---
+title: "IDS Workshop - Quanteda"
+subtitle: "How we met Quanteda - Analyzing the TV show ‘How I Met Your Mother’ with quanteda"
+author: "Alexander Kraess, Augusto Fonseca, Jorge Roa"
+date: "21/11/2022"
+output: 
+  html_document:
+    toc: TRUE
+    df_print: paged
+    number_sections: FALSE
+    highlight: tango
+    theme: lumen
+    toc_depth: 3
+    toc_float: true
+    self_contained: false
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+rm(list = ls()) # to clean the workspace
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+```
+
+------------------------------------------------------------------------
+```{r, fig.align='left', echo=F, out.width = "30%"}
+knitr::include_graphics("images/hertie_logo.png")
+```
+
+
+
+```{r, fig.align='center', echo=F, out.width = "60%"}
+knitr::include_graphics("images/himym.png")
+```
+
+# 1. Welcome the exercises for Quanteda!
+
+Quanteda is a brilliant package, and we hope that we can show you this power fullness! 
+In this session You will practice the basic concepts, some filters and also some visualization features.
+
+Fell free to access our GitHub page (https://github.com/jurjoroa/text_analysis_quanteda) to check our code and other details.
+
+
+**Step 1** Load the packages which we will use (don't forget to install them before!).
+```{r, message=F}
+library(tidyverse)
+library(tidytext)
+library(quanteda)
+library(quanteda.textstats)
+library(quanteda.textplots)
+library(stringr)
+library(spacyr)
+library(ggsci)
+library(ggrepel)
+library(RColorBrewer)
+library(cowplot)
+library(magick)
+library(gghighlight)
+library(readtext)
+library(rvest)
+library(xml2)
+library(polite)
+library(httr) #Package for working with HTTP organised by HTTP verbs 
+```
+
+# 2. We will skip the scraping part and will directly jump to our data. You can load the data from our github-repository
+
+
+**Step 2.1** Load the files "df_himym_final_doc.Rdata" and "df_characters_w.Rdata" from data folder.
+
+```{r, message=F}
+## 03.1- Load data- -----------------------------------------------------------
+#If you want to know how we generated this data, go to the session 2 (or even the script 02_web_scrap)
+obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
+load("data/df_himym_final_doc.Rdata")
+load("data/df_characters_w.Rdata")
+
+
+```
+
+# 3. Uploading data into Quanteda corpus
+
+OK! It's showtime! Let's upload all our data into a Quanteda corpus element.
+
+**Step 3.1** First Step: Define a corpus "corp_himym", change the doc names to the name of the episode and them show the corpus summary.
+
+```{r, message=F}
+
+
+
+
+```
+**Step 3.2** Now, let's "tokenize" it!
+Convert corpus into tokens and wrangle it.
+
+A- Choose one season and filter the corpus element created to show only the documents for this season. Check it with the summary function.
+B - tokenize the corpus subsetted and call it "toks_himym_s1". Show it's content.
+C- Use the parameter "remove_punct" to remove the punctuation elements from this token.  Show it's content. 
+D- Use the parameter "remove_separators" to remove the separator elements from this token.  Show it's content.
+E- Use the parameter "remove_numbers" to remove the number elements from this token.  Show it's content.
+F- Use the parameter "remove_symbols" to remove the symbol elements from this token.  Show it's content.
+G- Use the function "tokens_remove" to remove the stopword elements from this token.  Show it's content.
+
+
+Did you realize the difference? Now we can focus just on the words!
+
+```{r}
+
+
+```
+
+**Step 3.3** Create a DFM from the token "toks_himym_s1" and name it "toks_himym_dm_s1"
+
+```{r}
+# 03.- Third step: Convert our tokens into a Document Feature Matrix -----------
+
+```
+
+
+Let's check the new subsetted DFM. Is it like the corpus element?
+
+
+```{r}
+
+
+
+```
+
+# 4. Now... let's have fun!
+
+Now that we already upload the data and created the Quanteda elements, we can try some basics analysis.
+
+
+
+**Step 4.1** Have you ever thought that you had seen an episode before? 
+Let's check the similarity between episodes! Use the function "textstat_simil" to check the similarity between the episodes and plot it.
+
+
+
+```{r}
+
+
+
+
+```
+
+**Step 4.3**  Is there a correlation between the episodes? Use the function "textstat_dist" to check the distance between the episodes.
+
+
+
+```{r}
+
+
+
+
+
+
+```
+
+
+**Step 4.4** What is the main actor for you? Does it depend on the season?
+
+A- Use the corpus that contain all seasons (corp_himym) and tokenize it, removing punctuation, separators, numbers, symbols and stopwords and save it as "toks_himym".
+
+B- You can use the function "tokens_select" to select just the main HIMYM characters ("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother"). After that, group it by season using the function "tokens_group" and create a DFM naming it as "dfm_actors". 
+
+C - Use the function "textstat_frequency" to check the frequency of each character.
+
+D - Plot it with ggplot.
+
+
+```{r}
+
+
+
+
+
+```
+
+**Step 5.5** What is the most frequent character that appears in the TV show?
+Use the function "textplot_wordcloud" to plot it as a wordcloud chart.
+
+
+```{r}
+
+```
+
+**Step 4.6** What about the SECONDARY characters?
+Try to make  the same approach, not considering  the main characters("Ted", "Barney", "Lily", "Robin", "Marshall")
+
+
+```{r}
+
+
+
+
+
+```
+
+# 6. Network plots
+
+**Step 6.1** Now let's just show you some powerful features for visualizing relationships using a network graph
+
+
+
+```{r}
+
+
+
+
+```
+
+
+**Step 6.2** Network plot with 30 principal characters
+
+
+
+```{r}
+
+
+
+
+
+```
+
+
+**Step 6.3** Network plot of Ted
+
+
+
+```{r}
+
+
+
+
+
+
+
+```
+
+```
+
+

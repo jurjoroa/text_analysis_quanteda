@@ -67,9 +67,8 @@ library(httr) #Package for working with HTTP organised by HTTP verbs
 
 # 2. We will skip the scraping part and will directly jump to our data. You can load the data from our github-repository
 
-If you went through session 2, you already get the data raw and can jump to session "4. Uploading data into Quanteda corpus"
 
-**Step 2.1** Load the files
+**Step 2.1** Load the files "df_himym_final_doc.Rdata" and "df_characters_w.Rdata" from data folder.
 
 ```{r, message=F}
 ## 03.1- Load data- -----------------------------------------------------------
@@ -85,7 +84,7 @@ load("data/df_characters_w.Rdata")
 
 OK! It's showtime! Let's upload all our data into a Quanteda corpus element.
 
-**Step 3.1** First Step: Define a corpus
+**Step 3.1** First Step: Define a corpus "corp_himym", change the doc names to the name of the episode and them show the corpus summary.
 
 ```{r, message=F}
 # 01.- Quanteda analysis -------------------------------------------------------
@@ -94,12 +93,23 @@ corp_himym <- corpus(df_himym_final_doc)  #Build a new corpus from the texts
 docnames(corp_himym) <- df_himym_final_doc$Title
 summary(corp_himym, n = 15)
 ```
-**Step 3.2** Convert corpus into tokens and wrangle it
+**Step 3.2** Now, let's "tokenize" it!
+Convert corpus into tokens and wrangle it.
+
+A- Choose one season and filter the corpus element created to show only the documents for this season. Check it with the summary function.
+B - tokenize the corpus subsetted and call it "toks_himym_s1". Show it's content.
+C- Use the parameter "remove_punct" to remove the punctuation elements from this token.  Show it's content. 
+D- Use the parameter "remove_separators" to remove the separator elements from this token.  Show it's content.
+E- Use the parameter "remove_numbers" to remove the number elements from this token.  Show it's content.
+F- Use the parameter "remove_symbols" to remove the symbol elements from this token.  Show it's content.
+G- Use the function "tokens_remove" to remove the stopword elements from this token.  Show it's content.
+
+
+Did you realize the difference? Now we can focus just on the words!
 
 ```{r}
 # 03.- Second step: Convert corpus into tokens and wrangle it ------------------
 corp_himym_stat <- corp_himym
-docnames(corp_himym_stat) <- df_himym_final_doc$Title_season #The names of the different documents in the corpus will be the names of the episodes
 corp_himym_s1_simil <- corpus_subset(corp_himym_stat, Season == 1) #We want to analyze just the first season
 toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from the first season
                         remove_punct = TRUE, #Remove punctuation of our texts
@@ -107,9 +117,11 @@ toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from 
                         remove_numbers = TRUE, #Remove numbers of our texts
                         remove_symbols = TRUE) %>% #Remove symbols of our texts
   tokens_remove(stopwords("english")) #Remove stop words of our texts
+
+
 ```
 
-**Step 3.3** Create a DFM.
+**Step 3.3** Create a DFM from the token "toks_himym_s1" and name it "toks_himym_dm_s1"
 
 ```{r}
 # 03.- Third step: Convert our tokens into a Document Feature Matrix -----------
@@ -118,10 +130,10 @@ toks_himym_dm_s1 <- toks_himym_s1 %>%
 ```
 
 
-Let's check the new subsetted DFM
+Let's check the new subsetted DFM. Is it like the corpus element?
 
 
-```{r, eval=F}
+```{r}
 toks_himym_dm_s1
 ```
 
@@ -132,11 +144,11 @@ Now that we already upload the data and created the Quanteda elements, we can tr
 
 
 **Step 4.1** Have you ever thought that you had seen an episode before? 
-Let's check the similarity between episodes!
+Let's check the similarity between episodes! Use the function "textstat_simil" to check the similarity between the episodes and plot it.
 
 
 
-```{r, eval=F}
+```{r}
 # 05.- Similarity between episodes --------------------------------------------
 ## 05.01.- textstat_simil function- --------------------------------------------
 tstat_simil <- textstat_simil(toks_himym_dm_s1) #Check similarity between episodes of the first season
@@ -164,11 +176,11 @@ plot(dclust, nodePar = nodePar,
 rect.hclust(clust, k = 5, border = "red")
 ```
 
-**Step 4.3**  Is there a correlation between the episodes?
+**Step 4.3**  Is there a correlation between the episodes? Use the function "textstat_dist" to check the distance between the episodes.
 
 
 
-```{r, eval=F}
+```{r}
 # 06.- Distance between episodes (by correlation) ------------------------------
 ## 06.01.- textstat_dist function- ---------------------------------------------
 tstat_dist <- textstat_dist(toks_himym_dm_s1)
@@ -192,9 +204,16 @@ rect.hclust(clust_dist, k = 5, border = "red")
 
 **Step 4.4** What is the main actor for you? Does it depend on the season?
 
+A- Use the corpus that contain all seasons (corp_himym) and tokenize it, removing punctuation, separators, numbers, symbols and stopwords and save it as "toks_himym".
+
+B- You can use the function "tokens_select" to select just the main HIMYM characters ("Ted", "Marshall", "Lily", "Robin", "Barney", "Mother"). After that, group it by season using the function "tokens_group" and create a DFM naming it as "dfm_actors". 
+
+C - Use the function "textstat_frequency" to check the frequency of each character.
+
+D - Plot it with ggplot.
 
 
-```{r, eval=F}
+```{r}
 # 07.- Appearances of actors by season------------------------------------------
 
 ## 07.01.- Characters by season--------------------------------------------------
@@ -253,10 +272,10 @@ RColorBrewer::brewer.pal(n = 7, name = "Set1")
 ```
 
 **Step 5.5** What is the most frequent character that appears in the TV show?
+Use the function "textplot_wordcloud" to plot it as a wordcloud chart.
 
 
-
-```{r, eval=F}
+```{r}
 # 08.- Wordcloud of PRINCIPAL characters that appears in HIMYM------------------
 ## 08.01.- Wordcloud steps------------------------------------------------------
 ### 08.01.01.- Second step: Tokens----------------------------------------------
@@ -280,10 +299,10 @@ textplot_wordcloud(dfm_general_characters,
 ```
 
 **Step 4.6** What about the SECONDARY characters?
+Try to make  the same approach, not considering  the main characters("Ted", "Barney", "Lily", "Robin", "Marshall")
 
 
-
-```{r, eval=F}
+```{r}
 # 09.- Wordcloud of SECONDARY characters that appears in HIMYM------------------
 ## 09.01.- Wordcloud steps------------------------------------------------------
 ### 09.01.01.- Second step: Tokens----------------------------------------------
@@ -309,11 +328,11 @@ textplot_wordcloud(dfm_general_sec_characters,
 
 # 6. Network plots
 
-**Step 6.1** Network plot
+**Step 6.1** Now let's just show you some powerful features for visualizing relationships using a network graph
 
 
 
-```{r, eval=F}
+```{r}
 # How are the characters related each other? 
 # We can answer this question with network plots and use quanteda for it
 
@@ -348,7 +367,7 @@ textplot_network(fcm_select(fcm_characters_himym, v_top_characters),
 
 
 
-```{r, eval=F}
+```{r}
 ## 11.03.- Network plot with 30 principal characters----------------------------
 #Vector with 30 characters
 v_top_characters_2 <- stringr::str_to_sentence(names(topfeatures(fcm_characters_himym, 30)))
@@ -365,7 +384,7 @@ textplot_network(fcm_select(fcm_characters_himym, v_top_characters_2),
 
 
 
-```{r, eval=F}
+```{r}
 ## 11.03.- Network plot of Ted -------------------------------------------------
 fcm_characters_himym_ted <- token_characters_himym %>%
   tokens_remove(c("marshall", "lily", "barney", "robin")) %>% #Here we just want ted, that why we remove the other principal characters

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Alexander Kraess, Augusto Fonseca, Jorge Roa" />
+
+
+<title>IDS Workshop - Quanteda</title>
+
+<script src="Exercise-quanteda_cleaned_files/header-attrs-2.16/header-attrs.js"></script>
+<script src="Exercise-quanteda_cleaned_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="Exercise-quanteda_cleaned_files/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="Exercise-quanteda_cleaned_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="Exercise-quanteda_cleaned_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="Exercise-quanteda_cleaned_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="Exercise-quanteda_cleaned_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="Exercise-quanteda_cleaned_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="Exercise-quanteda_cleaned_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="Exercise-quanteda_cleaned_files/navigation-1.1/tabsets.js"></script>
+<link href="Exercise-quanteda_cleaned_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="Exercise-quanteda_cleaned_files/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">IDS Workshop - Quanteda</h1>
+<h3 class="subtitle">How we met Quanteda - Analyzing the TV show ‘How I
+Met Your Mother’ with quanteda</h3>
+<h4 class="author">Alexander Kraess, Augusto Fonseca, Jorge Roa</h4>
+<h4 class="date">21/11/2022</h4>
+
+</div>
+
+
+<hr />
+<p><img src="images/hertie_logo.png" width="30%" style="display: block; margin: auto auto auto 0;" /></p>
+<p><img src="images/himym.png" width="60%" style="display: block; margin: auto;" /></p>
+<div id="welcome-the-exercises-for-quanteda" class="section level1">
+<h1>1. Welcome the exercises for Quanteda!</h1>
+<p>Quanteda is a brilliant package, and we hope that we can show you
+this power fullness! In this session You will practice the basic
+concepts, some filters and also some visualization features.</p>
+<p>Fell free to access our GitHub page (<a
+href="https://github.com/jurjoroa/text_analysis_quanteda"
+class="uri">https://github.com/jurjoroa/text_analysis_quanteda</a>) to
+check our code and other details.</p>
+<p><strong>Step 1</strong> Load the packages which we will use (don’t
+forget to install them before!).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textstats)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textplots)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spacyr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggsci)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gghighlight)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readtext)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xml2)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(polite)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr) <span class="co">#Package for working with HTTP organised by HTTP verbs </span></span></code></pre></div>
+</div>
+<div
+id="we-will-skip-the-scraping-part-and-will-directly-jump-to-our-data.-you-can-load-the-data-from-our-github-repository"
+class="section level1">
+<h1>2. We will skip the scraping part and will directly jump to our
+data. You can load the data from our github-repository</h1>
+<p><strong>Step 2.1</strong> Load the files “df_himym_final_doc.Rdata”
+and “df_characters_w.Rdata” from data folder.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 03.1- Load data- -----------------------------------------------------------</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#If you want to know how we generated this data, go to the session 2 (or even the script 02_web_scrap)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>obj_img <span class="ot">&lt;-</span> <span class="fu">image_read</span>(<span class="at">path =</span> <span class="st">&quot;https://bit.ly/3twmH2Y&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/df_himym_final_doc.Rdata&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/df_characters_w.Rdata&quot;</span>)</span></code></pre></div>
+</div>
+<div id="uploading-data-into-quanteda-corpus" class="section level1">
+<h1>3. Uploading data into Quanteda corpus</h1>
+<p>OK! It’s showtime! Let’s upload all our data into a Quanteda corpus
+element.</p>
+<p><strong>Step 3.1</strong> First Step: Define a corpus “corp_himym”,
+change the doc names to the name of the episode and them show the corpus
+summary.</p>
+<p><strong>Step 3.2</strong> Now, let’s “tokenize” it! Convert corpus
+into tokens and wrangle it.</p>
+<p>A- Choose one season and filter the corpus element created to show
+only the documents for this season. Check it with the summary function.
+B - tokenize the corpus subsetted and call it “toks_himym_s1”. Show it’s
+content. C- Use the parameter “remove_punct” to remove the punctuation
+elements from this token. Show it’s content. D- Use the parameter
+“remove_separators” to remove the separator elements from this token.
+Show it’s content. E- Use the parameter “remove_numbers” to remove the
+number elements from this token. Show it’s content. F- Use the parameter
+“remove_symbols” to remove the symbol elements from this token. Show
+it’s content. G- Use the function “tokens_remove” to remove the stopword
+elements from this token. Show it’s content.</p>
+<p>Did you realize the difference? Now we can focus just on the
+words!</p>
+<p><strong>Step 3.3</strong> Create a DFM from the token “toks_himym_s1”
+and name it “toks_himym_dm_s1”</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 03.- Third step: Convert our tokens into a Document Feature Matrix -----------</span></span></code></pre></div>
+<p>Let’s check the new subsetted DFM. Is it like the corpus element?</p>
+</div>
+<div id="now-lets-have-fun" class="section level1">
+<h1>4. Now… let’s have fun!</h1>
+<p>Now that we already upload the data and created the Quanteda
+elements, we can try some basics analysis.</p>
+<p><strong>Step 4.1</strong> Have you ever thought that you had seen an
+episode before? Let’s check the similarity between episodes! Use the
+function “textstat_simil” to check the similarity between the episodes
+and plot it.</p>
+<p><strong>Step 4.3</strong> Is there a correlation between the
+episodes? Use the function “textstat_dist” to check the distance between
+the episodes.</p>
+<p><strong>Step 4.4</strong> What is the main actor for you? Does it
+depend on the season?</p>
+<p>A- Use the corpus that contain all seasons (corp_himym) and tokenize
+it, removing punctuation, separators, numbers, symbols and stopwords and
+save it as “toks_himym”.</p>
+<p>B- You can use the function “tokens_select” to select just the main
+HIMYM characters (“Ted”, “Marshall”, “Lily”, “Robin”, “Barney”,
+“Mother”). After that, group it by season using the function
+“tokens_group” and create a DFM naming it as “dfm_actors”.</p>
+<p>C - Use the function “textstat_frequency” to check the frequency of
+each character.</p>
+<p>D - Plot it with ggplot.</p>
+<p><strong>Step 5.5</strong> What is the most frequent character that
+appears in the TV show? Use the function “textplot_wordcloud” to plot it
+as a wordcloud chart.</p>
+<p><strong>Step 4.6</strong> What about the SECONDARY characters? Try to
+make the same approach, not considering the main characters(“Ted”,
+“Barney”, “Lily”, “Robin”, “Marshall”)</p>
+</div>
+<div id="network-plots" class="section level1">
+<h1>6. Network plots</h1>
+<p><strong>Step 6.1</strong> Now let’s just show you some powerful
+features for visualizing relationships using a network graph</p>
+<p><strong>Step 6.2</strong> Network plot with 30 principal
+characters</p>
+<p><strong>Step 6.3</strong> Network plot of Ted</p>
+<p>```</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
