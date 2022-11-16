@@ -1,4 +1,65 @@
- .height_chunk {
+hr.rounded {
+  border: 2px solid #0a6aec;
+  border-radius: 5px;
+}
+
+
+.myimg {
+  border-radius: 50%;
+overflow-x:hidden;
+}
+
+.myimg2 {
+  border-radius: 10%;
+
+}
+
+body, html{
+    overflow:hidden;
+}
+
+
+.font_title_2 {
+  font-size: 1.2em; /* 14px/16=0.875em */
+}
+
+.font_small {
+  font-size: .6em; /* 14px/16=0.875em */
+}
+
+.font_small_1 {
+  font-size: .5em; /* 14px/16=0.875em */
+}
+
+
+
+
+.brxbig {
+            margin-bottom: 10em;
+        }
+
+.brxsmall {
+            display: block;
+            margin-bottom: -.4em;
+        }
+        
+        .brxsmall_small {
+            margin-bottom: -.9em;
+        }
+
+.slide-logo{
+  
+  position: relative; z-index: 2
+}
+
+
+.height_chunk_bg_blue {
+width: 500px;
+  background-color: #d9edf7!important;
+
+}
+
+.height_chunk {
 width: 400px;
 }
 
@@ -22,15 +83,68 @@ width: 850px;
 
  .width_chunk5 {
 width: 700px;
+font-size: 10px;
 }
 
 
- 
+
+
+.sectionhead {
+  font-size: 1em;
+  text-align: center;
+  color: $presentation-heading-color;
+  font-family: $presentation-heading-font;
+  background-color: $body-bg;
+  margin: 1px;
+  padding: 2px 2px 2px 2px;
+  width: 120px;
+  border-left: 10px solid;
+}
+
+
+.reveal .footer {
+  font-size: 1em !important;
+  font:white;
+}
+
+
+ .height_chunk {
+width: 400px;
+}
+
+
+.reveal .slide-logo {
+  height: 50px !important;
+  width: 380px!important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+ .height_chunk2 {
+width: 780px;
+height:650px;
+font-size: 15px;
+}
+  .height_auto {
+width: auto;
+height: auto;
+}
+
+ .height_chunk4 {
+width: 850px;
+}
+
+
    code.r {
-  font-size: 17px;
-  code-block-bg: #ded9ca;
-  code-block-border-color: #000000;
+  font-size: 12.5px;
+  border: 5px solid #006DAE;
 }
+
+/* output results
+pre {
+  font-size: 20px
+}*/
+
 
     .subtitle{
     /**display: inline-block; **/
@@ -42,7 +156,7 @@ width: 700px;
       .font_table{
     /**display: inline-block; **/
     font-size: 14px;
-    width: 770px;
+    width: 850px;
     /**line-height: 1.2em;
     vertical-align: top;**/
   }
@@ -50,13 +164,13 @@ width: 700px;
     
     .reveal {
     /**display: inline-block; **/
-    font-size: 1.7em;
+    font-size: 2em;
     /**line-height: 1.2em;
     vertical-align: top;**/
   }
 
 
-
+/***
 .reveal .slide-background {
   float: left;
   content: url('../images/quanteda.svg') ;
@@ -71,6 +185,7 @@ margin-left: -43%;
   max-width: unset !important;
   max-height: unset !important;
 }
+***/
 
 #title-slide .author {
   font-size: 45px!important;
@@ -78,14 +193,14 @@ margin-left: -43%;
 
 
 #title-slide .title {
-  font-size: 140px!important;
+  font-size: 100px!important;
 }
 
-#title-slide .author:after {
-  
-   /***
-  content: url('../images/monash-stacked-blue-rgb.png') ;
+#title-slide .title:after {
+  content: url('../images/himym.png');
+   zoom:40%;
   display: block;
+  
 
   /***
     display: block;
@@ -93,8 +208,12 @@ margin-left: -43%;
     height: 200px;
     background: transparent url('../images/monash-one-line-black-rgb.png') no-repeat;
   
-
     ***/
+}
+
+.title-slide{
+  
+  background-color: radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% );
 }
 
 .box {
@@ -108,6 +227,10 @@ margin-left: -43%;
 
 .font-small {
   font-size: 1.2rem;
+}
+
+.font-subtitle {
+  font-size: 2rem;
 }
 
 .info-box {

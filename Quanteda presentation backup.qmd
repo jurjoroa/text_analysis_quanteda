@@ -50,6 +50,7 @@ library(quanteda.textplots)
 library(stringr)
 library(spacyr)
 library(xml2)
+library(readtext)
 library(ggsci)
 ```
 </center>
