@@ -1,17 +1,49 @@
 # Text analysis with quanteda
 
 
+
 ## Summary
 
-This repository provides materials for a session that is part of the [I2DS Tools for Data Science workshop](https://github.com/intro-to-data-science-22-workshop) run at the [Hertie School, Berlin](https://www.hertie-school.org/en/) in November 2022. The student-run workshop is part of the course [Introduction to Data Science](https://github.com/intro-to-data-science-22) taught by Simon Munzert at the Hertie School, Berlin, in Fall 2022.
+This repository provides materials for a session that is part of the I2DS Tools for Data Science workshop run at the Hertie School, Berlin in November 2022. The student-run workshop is part of the course Introduction to Data Science taught by Simon Munzert at the Hertie School, Berlin, in Fall 2022.
 
 ### Session contents
 
-This session will introduce you to the modern data wrangling workflow with R and dplyr. Data wrangling is one of the core steps in the data science workflow. dplyr is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges, including the manipulation of datasets and variables. 
+ 🎉 Welcome everyone to text analysis with quanteda 🎉
+
+Have you ever wondered if analyzing what we read, write, say, and think is possible? Have you ever been curious to know if we can quantitatively measure and manage the speeches we hear, the movies we watch, or what we say to someone else? I have excellent news for you: it is possible and easier than you think. Quanteda is the answer to all your questions in this area.
+
+This session will introduce you to the amazing quanteda world. Quanteda is the perfect package and a favorite for academia, researchers, and anyone who wants to do text mining and analysis with multiple text formats. Imagine, with this package; we can load .txt text files, word documents, and any other text format that can be read for further analysis. Quanteda is your best tool to generate word clouds, do statistics with words, and even be able to make inferences from your analyzed texts.
+
+To teach you the main features of Quanteda and its potential, we will analyze a TV series; Yes, that's right: the television series How I Met Your Mother. We will discover principal characters; we will be able to know with whom they are related and even search for the most legendary phrases and the most useful words. Plus: we will do some sentiment analysis on the TV Show. Quanteda is fantastic, and our material will encourage you to enter the wonderful world of text analysis.
+
+Our repository is divided as follows:
+
+📁 Exercises
+
+📁 images
+
+📁 Asse
+
+📄
+
+📄
+
+📄
+
 
 ### Main learning objectives
 
-The goals of this session are to (1) equip you with conceptual knowledge about the dplyr package and data wrangling workflow, (2) show you the three key verbs of the pacakge, and (3) provide you with practice material as well as some further readings.
+The goals of this session are to 
+
+1.- Introduce you to the world of quanteda.
+
+2.- Show you the three main functions of quanteda for doing analysis: corpus, tokens, and dfm objects.
+
+3.- Learn how to implement the most important analytics when having text.
+
+4.-Handle the text and give you an idea of how you can present your own research.
+
+5.- We are going to provide reference material, presentations and even exercises so that you understand what the text analysis process is like. We want you to have fun, but also learn with clear and fun examples.
 
 
 ## Instructors
