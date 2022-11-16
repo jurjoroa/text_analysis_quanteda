@@ -18,11 +18,11 @@ The goals of this session are to (1) equip you with conceptual knowledge about t
 
 🥋 Jorge Roa [GitHub](https://github.com/jurjoroa) | [LinkedIn](https://www.linkedin.com/in/jorge-roac) | [Twitter](https://twitter.com/jorgeroac)
 
-🥋 Augusto Fonseca [Email](cesaraccf@gmail.com) 
+🥋 Augusto Fonseca [GitHub](https://github.com/Augustofonseca25) | [Email](cesaraccf@gmail.com)  
 
-🥋 Alexander Kraess [Email](alexander.kraess@sciencespo.fr)
+🥋 Alexander Kraess [Email](alexander.kraess@sciencespo.fr) | [Twitter](https://twitter.com/resourcesalexander.kraess)
 
-## Further resources
+## Further 
 
 🎯 [Quanteda Webpage](https://quanteda.io/)
 
