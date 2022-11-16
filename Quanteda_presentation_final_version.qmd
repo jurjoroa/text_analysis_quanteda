@@ -123,9 +123,9 @@ A lot of data is in text form, many tools convert audios into text and there is 
 <center>💣 **The power of Quanteda allow us to do multiple analysis in different areas** 💣</center>
 
 
-# What do you need to always remeber about quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+# What do you need to always remember about quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
 
-# What do you need to always remeber about quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+# What do you need to always remember about quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
 
 **Three things**
 
