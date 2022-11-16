@@ -29,7 +29,6 @@ format:
       footer: "Quanteda"
       css: [assets/syntax-highlight.css, assets/custom.css, assets/pacman.css]
       transition: fade
-      bibliography: bibliography/references.bib
       transition-speed: fast
       margin-bottom: 1px
       theme: default
@@ -474,31 +473,58 @@ Remember that you can use a pipe`%>%`for all the functions of the package.
 All rights of each image to whom they correspond.
 
 ![](https://www.logolynx.com/images/logolynx/4d/4d3e98f7c3a69607414253c54137ac3f.png){fig-align="center" height="50"}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
+load("data/df_himym_final_doc.Rdata")
+load("data/df_characters_w.Rdata")
+load("data/df_spaCyr_himym.Rdata")
+
+```
+
+# Let's start, shall we? {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
+
+
+![](https://media3.giphy.com/media/xnNKRYdeemYi4/giphy.gif?cid=ecf05e47ueaba5lvfpep5evcnun2myllhnx26vj707in4zoe&rid=giphy.gif&ct=g){fig-align="center" height="500"}
+
+# Packages for the analysis {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;"}
 
 # Packages for the analysis {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
 
 
-
-
 <center>
 
-```{r, eval = FALSE}
-#| class-source:  height_chunk_bg_blue
-#| classes:  height_chunk_bg_blue
+```{r libraries, eval = TRUE}
 
-library(tidyverse)
-library(quanteda)
-library(rvest)
-library(quanteda.textstats)
-library(quanteda.textplots)
-library(stringr)
-library(spacyr)
-library(xml2)
-library(ggsci)
+
+library(readtext) #For import and Handling for Plain and Formatted Text Files.
+library(rvest) #For easily Harvest (Scrape) Web Pages.
+library(xml2) #For working with XML files using a simple, consistent interface.
+library(polite) #For be responsible when scraping data from websites.
+library(httr) #Package for working with HTTP organised by HTTP verbs 
+library(tidyverse) #Opinionated collection of R packages designed for data science.
+library(tidytext) #Functions and supporting data sets to allow conversion of text.
+library(quanteda) #OUR PACKAGE for text analysis. 
+library(quanteda.textstats) #OUR SUBPACKAGE for text statistics. 
+library(quanteda.textplots) #OUR SUBPACKAGE for text plots. 
+library(stringr) #Consistent Wrappers for Common String Operations.
+library(spacyr) #NLP package that comes from Python that help us classify words.
+library(ggsci) #Collection of high-quality color palettes.
+library(ggrepel) # ggrepel provides geoms for ggplot2 to repel overlapping text labels
+library(RColorBrewer) #Beautifull color palettes.
+library(cowplot) #Package to put images in our plots.
+library(magick) #Package for save images in our environment
+library(gghighlight) #gghighlight() adds direct labels for some geoms.
+
+#Set image
+obj_img <- image_read(path = "https://bit.ly/3twmH2Y")
+
 ```
 
 </center>
+
+# Packages for the analysis {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
 
 ::: incremental
 ::: columns
@@ -542,65 +568,140 @@ library(ggsci)
 #| class-source:  height_auto
 #| classes:  height_auto
 
-url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
+v_tv_show <- "how-i-met-your-mother"
 
-url_himym_characters <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"
+v_url_web <- "http://www.springfieldspringfield.co.uk/"
 
-l_tables_himym <- url_himym %>% 
-                   read_html() %>% 
-                   html_nodes("table") %>% 
-                   html_table(fill = TRUE)
+#Remember to be polite and know if we can web scrap the webpage
+session_information <- bow(v_url_web) #Do a bow with the polite package
+session_information
 
-#This generates a list with all the tables that contain the page. In our case, 
-#we want the table from the second element till the 10th. 
-l_tables_himym <- l_tables_himym[c(2:10)]
+v_url <- paste(v_url_web,"episode_scripts.php?tv-show=", v_tv_show, sep="")
 
-#Reduce the list in one data frame since all of the tables share the same structure 
-df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+#Identify yourself
+rvest_himym <- session(v_url, 
+                       add_headers(`From` = "jurjoo@gmail.com", 
+                                   `UserAgent` = R.Version()$version.string))
 
-#We do the same for the characters of HIMYM
-l_tables_himym_characters <- url_himym_characters %>% 
-                             read_html() %>% 
-                             html_nodes("table") %>% 
-                             html_table(fill = TRUE)
+#Start web scrap
+html_url_scrape <- rvest_himym %>% read_html(v_url)
 
-df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
-                 select(Character)
+node_selector <- ".season-episode-title"
 
-df_characters_w <- df_characters %>% 
-  filter(!stringr::str_starts(Character, "Futu"),
-         !(Character %in% c("Character", "Main Characters", "Supporting Characters"))) %>% 
-  mutate(name = str_extract(Character,"([^ ]+)"),
-         name = replace(name, name == "Dr.", "Sonya"))
+directory_path <- paste("texts/how-i-met-your-mother/", v_tv_show, sep = "")
+
 ```
 
 -   First step: we must download the TV show scripts. For that, we have multiple options, but one efficient way to do it is by applying some web scrap techniques to obtain our texts and other relevant information.
 :::
 
 ::: {.column width="50%"}
+
 -   This chunk of code shows how we can retrieve data from the internet. For our purpose, we will use [Sprigfield](springfieldspringfield.co.uk) webpage. Here, you can download the original TV scripts from multiple shows; in our case, we will download the How I Met Your Mother scripts.
+
+
 
 ```{r, eval = FALSE}
 #| class-source:  height_auto
 #| classes:  height_auto
 
-#Reduce the list in one data frame since all of the tables share the same structure 
-df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+html_url_all_seasons <- html_nodes(html_url_scrape, node_selector) %>%
+  html_attr("href")
 
-#We do the same for the characters of HIMYM
-l_tables_himym_characters <- url_himym_characters %>% 
-                             read_html() %>% 
-                             html_nodes("table") %>% 
-                             html_table(fill = TRUE)
+### One loop for all our URL's----------------------------------------
 
-df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
-                 select(Character)
-
-df_characters_w <- df_characters %>% 
-  filter(!stringr::str_starts(Character, "Futu"),
-         !(Character %in% c("Character", "Main Characters", "Supporting Characters"))) %>% 
-  mutate(name = str_extract(Character,"([^ ]+)"),
-         name = replace(name, name == "Dr.", "Sonya"))
+for (x in html_url_all_seasons) {
+  read_ur <- read_html(paste(v_url_web, x, sep="/"))
+  
+  Sys.sleep(runif(1, 0, 1)) #Be polite
+  
+  # Element node that was checked and that contain the place of the scripts.
+  selector <- ".scrolling-script-container"
+  # Scrape the text
+  text_html <- html_nodes(read_ur, selector) %>% 
+    html_text()
+  
+  # Last five characters of html_url_all_seasons for saving this to separate text files (This is our pattern).
+  sub_data <- function(x, n) {
+    substr(x, nchar(x) - n + 1, nchar(x))
+  }
+  seasons_final <- sub_data(x, 5)
+  # Write each text file
+  write.csv(text_html, file = paste(directory_path, "_", seasons_final, ".txt", sep=""), row.names = FALSE)
+}
 ```
 :::
 :::
+
+# 🪡  Webscrapp TV Show tables {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;"}
+
+::: columns
+::: {.column width="50%"}
+```{r, eval = TRUE}
+#| class-source:  height_auto
+#| classes:  height_auto
+#| code-fold: true
+
+url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
+
+rvest_himym_table <- session(url_himym, 
+                             add_headers(`From` = "jurjoo@gmail.com", 
+                                         `UserAgent` = R.Version()$version.string))
+
+l_tables_himym <- rvest_himym_table %>% 
+  read_html() %>% 
+  html_nodes("table") %>% 
+  html_table(fill = TRUE)
+
+#This generates a list with all the tables that contain the page. In our case, 
+#we want the table from the second element till the 10th. 
+l_tables_himym <- l_tables_himym[c(2:10)]
+
+```
+
+:::
+
+::: {.column width="50%"}
+
+-   Data cleaning to wrangle html tables (Characters of the TV show)
+
+
+
+```{r, eval = TRUE}
+#| class-source:  height_auto
+#| classes:  height_auto
+#| code-fold: true
+
+#Reduce the list in one data frame since all of the tables share the same structure 
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+
+
+#We do the same for the characters of HIMYM
+url_himym_characters <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"
+
+rvest_himym_table_2 <- session(url_himym_characters, 
+                               add_headers(`From` = "jurjoo@gmail.com", 
+                                           `UserAgent` = R.Version()$version.string))
+
+l_tables_himym_characters <- rvest_himym_table_2 %>% 
+  read_html() %>% 
+  html_nodes("table") %>% 
+  html_table(fill = TRUE)
+
+df_characters <- as.data.frame(l_tables_himym_characters[[1]]) %>% 
+  select(Character)
+
+df_characters_w <- df_characters %>% 
+  filter(!stringr::str_starts(Character, "Futu"),
+         !(Character %in% c("Character", "Main Characters", 
+                            "Supporting Characters"))) %>% 
+  mutate(name = str_extract(Character,"([^ ]+)"),
+         name = replace(name, name == "Dr.", "Sonya"))
+
+rmarkdown::paged_table(df_characters_w)
+```
+:::
+:::
+
+
+

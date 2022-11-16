@@ -89,25 +89,6 @@
     code span.va { color: #8be9fd; } /* Variable */
     code span.vs { color: #f1fa8c; } /* VerbatimString */
     code span.wa { color: #ff5555; } /* Warning */
-    div.csl-bib-body { }
-    div.csl-entry {
-      clear: both;
-    }
-    .hanging div.csl-entry {
-      margin-left:2em;
-      text-indent:-2em;
-    }
-    div.csl-left-margin {
-      min-width:2em;
-      float:left;
-    }
-    div.csl-right-inline {
-      margin-left:2em;
-      padding-left:1em;
-    }
-    div.csl-indent {
-      margin-left: 2em;
-    }
   </style>
   <link rel="stylesheet" href="Quanteda_presentation_final_version_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link rel="stylesheet" href="assets/syntax-highlight.css">
@@ -401,6 +382,9 @@
       margin-right: 0; 
     }
   </style>
+  
+  <link href="Quanteda_presentation_final_version_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+  <script src="Quanteda_presentation_final_version_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -502,7 +486,7 @@
 <li><p>Social science:</p>
 <ul>
 <li>Analysis of political speeches.</li>
-<li>Theory building and testing thorugh text analysis <span class="citation" data-cites="MACANOVIC2022102784">(<a href="#/ref-MACANOVIC2022102784" role="doc-biblioref" onclick="return false;">Macanovic 2022</a>)</span>.</li>
+<li>Theory building and testing thorugh text analysis <span class="citation" data-cites="MACANOVIC2022102784">[@MACANOVIC2022102784]</span>.</li>
 </ul></li>
 </ul>
 </div><div class="column" style="width:50%;">
@@ -800,21 +784,51 @@
 </div>
 </section>
 
-<section id="packages-for-the-analysis" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;">
+<section id="lets-start-shall-we" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;">
+<h1 data-id="quarto-animate-title">Let’s start, shall we?</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://media3.giphy.com/media/xnNKRYdeemYi4/giphy.gif?cid=ecf05e47ueaba5lvfpep5evcnun2myllhnx26vj707in4zoe&amp;rid=giphy.gif&amp;ct=g" height="500"></p>
+</figure>
+</div>
+</section>
+
+<section id="packages-for-the-analysis" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.2em;">
+<h1 data-id="quarto-animate-title">Packages for the analysis</h1>
+
+</section>
+
+<section id="packages-for-the-analysis-1" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;">
 <h1 data-id="quarto-animate-title">Packages for the analysis</h1>
 <center>
-<div class="cell height_chunk_bg_blue">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r height_chunk_bg_blue number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb1-1" class="hljs-ln-code"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2" class="hljs-ln-code"><a href="#cb1-2"></a><span class="fu">library</span>(quanteda)</span>
-<span id="cb1-3" class="hljs-ln-code"><a href="#cb1-3"></a><span class="fu">library</span>(rvest)</span>
-<span id="cb1-4" class="hljs-ln-code"><a href="#cb1-4"></a><span class="fu">library</span>(quanteda.textstats)</span>
-<span id="cb1-5" class="hljs-ln-code"><a href="#cb1-5"></a><span class="fu">library</span>(quanteda.textplots)</span>
-<span id="cb1-6" class="hljs-ln-code"><a href="#cb1-6"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb1-7" class="hljs-ln-code"><a href="#cb1-7"></a><span class="fu">library</span>(spacyr)</span>
-<span id="cb1-8" class="hljs-ln-code"><a href="#cb1-8"></a><span class="fu">library</span>(xml2)</span>
-<span id="cb1-9" class="hljs-ln-code"><a href="#cb1-9"></a><span class="fu">library</span>(ggsci)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb1-1" class="hljs-ln-code"><a href="#cb1-1"></a><span class="fu">library</span>(readtext) <span class="co">#For import and Handling for Plain and Formatted Text Files.</span></span>
+<span id="cb1-2" class="hljs-ln-code"><a href="#cb1-2"></a><span class="fu">library</span>(rvest) <span class="co">#For easily Harvest (Scrape) Web Pages.</span></span>
+<span id="cb1-3" class="hljs-ln-code"><a href="#cb1-3"></a><span class="fu">library</span>(xml2) <span class="co">#For working with XML files using a simple, consistent interface.</span></span>
+<span id="cb1-4" class="hljs-ln-code"><a href="#cb1-4"></a><span class="fu">library</span>(polite) <span class="co">#For be responsible when scraping data from websites.</span></span>
+<span id="cb1-5" class="hljs-ln-code"><a href="#cb1-5"></a><span class="fu">library</span>(httr) <span class="co">#Package for working with HTTP organised by HTTP verbs </span></span>
+<span id="cb1-6" class="hljs-ln-code"><a href="#cb1-6"></a><span class="fu">library</span>(tidyverse) <span class="co">#Opinionated collection of R packages designed for data science.</span></span>
+<span id="cb1-7" class="hljs-ln-code"><a href="#cb1-7"></a><span class="fu">library</span>(tidytext) <span class="co">#Functions and supporting data sets to allow conversion of text.</span></span>
+<span id="cb1-8" class="hljs-ln-code"><a href="#cb1-8"></a><span class="fu">library</span>(quanteda) <span class="co">#OUR PACKAGE for text analysis. </span></span>
+<span id="cb1-9" class="hljs-ln-code"><a href="#cb1-9"></a><span class="fu">library</span>(quanteda.textstats) <span class="co">#OUR SUBPACKAGE for text statistics. </span></span>
+<span id="cb1-10" class="hljs-ln-code"><a href="#cb1-10"></a><span class="fu">library</span>(quanteda.textplots) <span class="co">#OUR SUBPACKAGE for text plots. </span></span>
+<span id="cb1-11" class="hljs-ln-code"><a href="#cb1-11"></a><span class="fu">library</span>(stringr) <span class="co">#Consistent Wrappers for Common String Operations.</span></span>
+<span id="cb1-12" class="hljs-ln-code"><a href="#cb1-12"></a><span class="fu">library</span>(spacyr) <span class="co">#NLP package that comes from Python that help us classify words.</span></span>
+<span id="cb1-13" class="hljs-ln-code"><a href="#cb1-13"></a><span class="fu">library</span>(ggsci) <span class="co">#Collection of high-quality color palettes.</span></span>
+<span id="cb1-14" class="hljs-ln-code"><a href="#cb1-14"></a><span class="fu">library</span>(ggrepel) <span class="co"># ggrepel provides geoms for ggplot2 to repel overlapping text labels</span></span>
+<span id="cb1-15" class="hljs-ln-code"><a href="#cb1-15"></a><span class="fu">library</span>(RColorBrewer) <span class="co">#Beautifull color palettes.</span></span>
+<span id="cb1-16" class="hljs-ln-code"><a href="#cb1-16"></a><span class="fu">library</span>(cowplot) <span class="co">#Package to put images in our plots.</span></span>
+<span id="cb1-17" class="hljs-ln-code"><a href="#cb1-17"></a><span class="fu">library</span>(magick) <span class="co">#Package for save images in our environment</span></span>
+<span id="cb1-18" class="hljs-ln-code"><a href="#cb1-18"></a><span class="fu">library</span>(gghighlight) <span class="co">#gghighlight() adds direct labels for some geoms.</span></span>
+<span id="cb1-19" class="hljs-ln-code"><a href="#cb1-19"></a></span>
+<span id="cb1-20" class="hljs-ln-code"><a href="#cb1-20"></a><span class="co">#Set image</span></span>
+<span id="cb1-21" class="hljs-ln-code"><a href="#cb1-21"></a>obj_img <span class="ot">&lt;-</span> <span class="fu">image_read</span>(<span class="at">path =</span> <span class="st">"https://bit.ly/3twmH2Y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </center>
+</section>
+
+<section id="packages-for-the-analysis-2" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;">
+<h1 data-id="quarto-animate-title">Packages for the analysis</h1>
 <div>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -858,41 +872,32 @@
 
 </section>
 
-<section id="web-scraping-1" class="title-slide slide level1 smaller scrollable" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;">
+<section id="web-scraping-1" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;">
 <h1 data-id="quarto-animate-title">Web scraping 🏗️</h1>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell height_auto">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r height_auto number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>url_himym <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r height_auto number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>v_tv_show <span class="ot">&lt;-</span> <span class="st">"how-i-met-your-mother"</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>url_himym_characters <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>v_url_web <span class="ot">&lt;-</span> <span class="st">"http://www.springfieldspringfield.co.uk/"</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a>l_tables_himym <span class="ot">&lt;-</span> url_himym <span class="sc">%&gt;%</span> </span>
-<span id="cb2-6"><a href="#cb2-6"></a>                   <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-7"><a href="#cb2-7"></a>                   <span class="fu">html_nodes</span>(<span class="st">"table"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-8"><a href="#cb2-8"></a>                   <span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#This generates a list with all the tables that contain the page. In our case, </span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#we want the table from the second element till the 10th. </span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>l_tables_himym <span class="ot">&lt;-</span> l_tables_himym[<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>)]</span>
-<span id="cb2-13"><a href="#cb2-13"></a></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#Reduce the list in one data frame since all of the tables share the same structure </span></span>
-<span id="cb2-15"><a href="#cb2-15"></a>df_himym <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">Reduce</span>(bind_rows, l_tables_himym)) </span>
-<span id="cb2-16"><a href="#cb2-16"></a></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#We do the same for the characters of HIMYM</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a>l_tables_himym_characters <span class="ot">&lt;-</span> url_himym_characters <span class="sc">%&gt;%</span> </span>
-<span id="cb2-19"><a href="#cb2-19"></a>                             <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-20"><a href="#cb2-20"></a>                             <span class="fu">html_nodes</span>(<span class="st">"table"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-21"><a href="#cb2-21"></a>                             <span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-22"><a href="#cb2-22"></a></span>
-<span id="cb2-23"><a href="#cb2-23"></a>df_characters <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(l_tables_himym_characters[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-24"><a href="#cb2-24"></a>                 <span class="fu">select</span>(Character)</span>
-<span id="cb2-25"><a href="#cb2-25"></a></span>
-<span id="cb2-26"><a href="#cb2-26"></a>df_characters_w <span class="ot">&lt;-</span> df_characters <span class="sc">%&gt;%</span> </span>
-<span id="cb2-27"><a href="#cb2-27"></a>  <span class="fu">filter</span>(<span class="sc">!</span>stringr<span class="sc">::</span><span class="fu">str_starts</span>(Character, <span class="st">"Futu"</span>),</span>
-<span id="cb2-28"><a href="#cb2-28"></a>         <span class="sc">!</span>(Character <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Character"</span>, <span class="st">"Main Characters"</span>, <span class="st">"Supporting Characters"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-29"><a href="#cb2-29"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">str_extract</span>(Character,<span class="st">"([^ ]+)"</span>),</span>
-<span id="cb2-30"><a href="#cb2-30"></a>         <span class="at">name =</span> <span class="fu">replace</span>(name, name <span class="sc">==</span> <span class="st">"Dr."</span>, <span class="st">"Sonya"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#Remember to be polite and know if we can web scrap the webpage</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>session_information <span class="ot">&lt;-</span> <span class="fu">bow</span>(v_url_web) <span class="co">#Do a bow with the polite package</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>session_information</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>v_url <span class="ot">&lt;-</span> <span class="fu">paste</span>(v_url_web,<span class="st">"episode_scripts.php?tv-show="</span>, v_tv_show, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#Identify yourself</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>rvest_himym <span class="ot">&lt;-</span> <span class="fu">session</span>(v_url, </span>
+<span id="cb2-13"><a href="#cb2-13"></a>                       <span class="fu">add_headers</span>(<span class="st">`</span><span class="at">From</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"jurjoo@gmail.com"</span>, </span>
+<span id="cb2-14"><a href="#cb2-14"></a>                                   <span class="st">`</span><span class="at">UserAgent</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">R.Version</span>()<span class="sc">$</span>version.string))</span>
+<span id="cb2-15"><a href="#cb2-15"></a></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#Start web scrap</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>html_url_scrape <span class="ot">&lt;-</span> rvest_himym <span class="sc">%&gt;%</span> <span class="fu">read_html</span>(v_url)</span>
+<span id="cb2-18"><a href="#cb2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19"></a>node_selector <span class="ot">&lt;-</span> <span class="st">".season-episode-title"</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a>directory_path <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"texts/how-i-met-your-mother/"</span>, v_tv_show, <span class="at">sep =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>First step: we must download the TV show scripts. For that, we have multiple options, but one efficient way to do it is by applying some web scrap techniques to obtain our texts and other relevant information.</li>
@@ -902,34 +907,127 @@
 <li>This chunk of code shows how we can retrieve data from the internet. For our purpose, we will use <a href="springfieldspringfield.co.uk">Sprigfield</a> webpage. Here, you can download the original TV scripts from multiple shows; in our case, we will download the How I Met Your Mother scripts.</li>
 </ul>
 <div class="cell height_auto">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r height_auto number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#Reduce the list in one data frame since all of the tables share the same structure </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>df_himym <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">Reduce</span>(bind_rows, l_tables_himym)) </span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r height_auto number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>html_url_all_seasons <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(html_url_scrape, node_selector) <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#We do the same for the characters of HIMYM</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>l_tables_himym_characters <span class="ot">&lt;-</span> url_himym_characters <span class="sc">%&gt;%</span> </span>
-<span id="cb3-6"><a href="#cb3-6"></a>                             <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb3-7"><a href="#cb3-7"></a>                             <span class="fu">html_nodes</span>(<span class="st">"table"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-8"><a href="#cb3-8"></a>                             <span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a>df_characters <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(l_tables_himym_characters[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-11"><a href="#cb3-11"></a>                 <span class="fu">select</span>(Character)</span>
-<span id="cb3-12"><a href="#cb3-12"></a></span>
-<span id="cb3-13"><a href="#cb3-13"></a>df_characters_w <span class="ot">&lt;-</span> df_characters <span class="sc">%&gt;%</span> </span>
-<span id="cb3-14"><a href="#cb3-14"></a>  <span class="fu">filter</span>(<span class="sc">!</span>stringr<span class="sc">::</span><span class="fu">str_starts</span>(Character, <span class="st">"Futu"</span>),</span>
-<span id="cb3-15"><a href="#cb3-15"></a>         <span class="sc">!</span>(Character <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Character"</span>, <span class="st">"Main Characters"</span>, <span class="st">"Supporting Characters"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-16"><a href="#cb3-16"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">str_extract</span>(Character,<span class="st">"([^ ]+)"</span>),</span>
-<span id="cb3-17"><a href="#cb3-17"></a>         <span class="at">name =</span> <span class="fu">replace</span>(name, name <span class="sc">==</span> <span class="st">"Dr."</span>, <span class="st">"Sonya"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="do">### One loop for all our URL's----------------------------------------</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="cf">for</span> (x <span class="cf">in</span> html_url_all_seasons) {</span>
+<span id="cb3-7"><a href="#cb3-7"></a>  read_ur <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="fu">paste</span>(v_url_web, x, <span class="at">sep=</span><span class="st">"/"</span>))</span>
+<span id="cb3-8"><a href="#cb3-8"></a>  </span>
+<span id="cb3-9"><a href="#cb3-9"></a>  <span class="fu">Sys.sleep</span>(<span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)) <span class="co">#Be polite</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>  </span>
+<span id="cb3-11"><a href="#cb3-11"></a>  <span class="co"># Element node that was checked and that contain the place of the scripts.</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>  selector <span class="ot">&lt;-</span> <span class="st">".scrolling-script-container"</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>  <span class="co"># Scrape the text</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>  text_html <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(read_ur, selector) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="fu">html_text</span>()</span>
+<span id="cb3-16"><a href="#cb3-16"></a>  </span>
+<span id="cb3-17"><a href="#cb3-17"></a>  <span class="co"># Last five characters of html_url_all_seasons for saving this to separate text files (This is our pattern).</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a>  sub_data <span class="ot">&lt;-</span> <span class="cf">function</span>(x, n) {</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="fu">substr</span>(x, <span class="fu">nchar</span>(x) <span class="sc">-</span> n <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nchar</span>(x))</span>
+<span id="cb3-20"><a href="#cb3-20"></a>  }</span>
+<span id="cb3-21"><a href="#cb3-21"></a>  seasons_final <span class="ot">&lt;-</span> <span class="fu">sub_data</span>(x, <span class="dv">5</span>)</span>
+<span id="cb3-22"><a href="#cb3-22"></a>  <span class="co"># Write each text file</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>  <span class="fu">write.csv</span>(text_html, <span class="at">file =</span> <span class="fu">paste</span>(directory_path, <span class="st">"_"</span>, seasons_final, <span class="st">".txt"</span>, <span class="at">sep=</span><span class="st">""</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-24"><a href="#cb3-24"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="webscrapp-tv-show-tables" class="title-slide slide level1 center" data-auto-animate="true" data-auto-animate-easing="ease-in-out" data-background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;">
+<h1 data-id="quarto-animate-title">🪡 Webscrapp TV Show tables</h1>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell height_auto">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r height_auto number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>url_himym <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>rvest_himym_table <span class="ot">&lt;-</span> <span class="fu">session</span>(url_himym, </span>
+<span id="cb4-4"><a href="#cb4-4"></a>                             <span class="fu">add_headers</span>(<span class="st">`</span><span class="at">From</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"jurjoo@gmail.com"</span>, </span>
+<span id="cb4-5"><a href="#cb4-5"></a>                                         <span class="st">`</span><span class="at">UserAgent</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">R.Version</span>()<span class="sc">$</span>version.string))</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>l_tables_himym <span class="ot">&lt;-</span> rvest_himym_table <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="fu">html_nodes</span>(<span class="st">"table"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#This generates a list with all the tables that contain the page. In our case, </span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#we want the table from the second element till the 10th. </span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>l_tables_himym <span class="ot">&lt;-</span> l_tables_himym[<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>)]</span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a>l_tables_himym[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+# A tibble: 22 × 8
+   No.overall `No. inseason` Title       Direc…¹ Writt…² Origi…³ Prod.…⁴ US vi…⁵
+        &lt;int&gt;          &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
+ 1          1              1 "\"Pilot\"" Pamela… Carter… Septem… 1ALH79  10.94[…
+ 2          2              2 "\"Purple … Pamela… Carter… Septem… 1ALH01  10.40[…
+ 3          3              3 "\"Sweet T… Pamela… Phil L… Octobe… 1ALH02  10.44[…
+ 4          4              4 "\"Return … Pamela… Kourtn… Octobe… 1ALH03  9.84[1…
+ 5          5              5 "\"Okay Aw… Pamela… Chris … Octobe… 1ALH04  10.14[…
+ 6          6              6 "\"Slutty … Pamela… Brenda… Octobe… 1ALH05  10.89[…
+ 7          7              7 "\"Matchma… Pamela… Chris … Novemb… 1ALH07  10.55[…
+ 8          8              8 "\"The Due… Pamela… Gloria… Novemb… 1ALH06  10.35[…
+ 9          9              9 "\"Belly F… Pamela… Phil L… Novemb… 1ALH09  10.29[…
+10         10             10 "\"The Pin… Pamela… Carter… Novemb… 1ALH08  12.27[…
+# … with 12 more rows, and abbreviated variable names ¹​`Directed by`,
+#   ²​`Written by`, ³​`Original air date`, ⁴​Prod.code, ⁵​`US viewers(millions)`</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Data cleaning to wrangle html tables (Characters of the TV show)</li>
+</ul>
+<div class="cell height_auto">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r height_auto number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#Reduce the list in one data frame since all of the tables share the same structure </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>df_himym <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">Reduce</span>(bind_rows, l_tables_himym)) </span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#We do the same for the characters of HIMYM</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>url_himym_characters <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_characters"</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a>rvest_himym_table_2 <span class="ot">&lt;-</span> <span class="fu">session</span>(url_himym_characters, </span>
+<span id="cb6-9"><a href="#cb6-9"></a>                               <span class="fu">add_headers</span>(<span class="st">`</span><span class="at">From</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"jurjoo@gmail.com"</span>, </span>
+<span id="cb6-10"><a href="#cb6-10"></a>                                           <span class="st">`</span><span class="at">UserAgent</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">R.Version</span>()<span class="sc">$</span>version.string))</span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a>l_tables_himym_characters <span class="ot">&lt;-</span> rvest_himym_table_2 <span class="sc">%&gt;%</span> </span>
+<span id="cb6-13"><a href="#cb6-13"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-14"><a href="#cb6-14"></a>  <span class="fu">html_nodes</span>(<span class="st">"table"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-15"><a href="#cb6-15"></a>  <span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a>df_characters <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(l_tables_himym_characters[[<span class="dv">1</span>]]) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-18"><a href="#cb6-18"></a>  <span class="fu">select</span>(Character)</span>
+<span id="cb6-19"><a href="#cb6-19"></a></span>
+<span id="cb6-20"><a href="#cb6-20"></a>df_characters_w <span class="ot">&lt;-</span> df_characters <span class="sc">%&gt;%</span> </span>
+<span id="cb6-21"><a href="#cb6-21"></a>  <span class="fu">filter</span>(<span class="sc">!</span>stringr<span class="sc">::</span><span class="fu">str_starts</span>(Character, <span class="st">"Futu"</span>),</span>
+<span id="cb6-22"><a href="#cb6-22"></a>         <span class="sc">!</span>(Character <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Character"</span>, <span class="st">"Main Characters"</span>, </span>
+<span id="cb6-23"><a href="#cb6-23"></a>                            <span class="st">"Supporting Characters"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-24"><a href="#cb6-24"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">str_extract</span>(Character,<span class="st">"([^ ]+)"</span>),</span>
+<span id="cb6-25"><a href="#cb6-25"></a>         <span class="at">name =</span> <span class="fu">replace</span>(name, name <span class="sc">==</span> <span class="st">"Dr."</span>, <span class="st">"Sonya"</span>))</span>
+<span id="cb6-26"><a href="#cb6-26"></a></span>
+<span id="cb6-27"><a href="#cb6-27"></a>rmarkdown<span class="sc">::</span><span class="fu">paged_table</span>(df_characters_w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["Character"],"name":[1],"type":["chr"],"align":["left"]},{"label":["name"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Ted Mosby","2":"Ted"},{"1":"Marshall Eriksen","2":"Marshall"},{"1":"Robin Scherbatsky","2":"Robin"},{"1":"Barney Stinson","2":"Barney"},{"1":"Lily Aldrin","2":"Lily"},{"1":"Tracy McConnell","2":"Tracy"},{"1":"Penny Mosby","2":"Penny"},{"1":"Luke Mosby","2":"Luke"},{"1":"Carl MacLaren","2":"Carl"},{"1":"Ranjit Singh","2":"Ranjit"},{"1":"Sandy Rivers","2":"Sandy"},{"1":"Victoria","2":"Victoria"},{"1":"Wendy the Waitress","2":"Wendy"},{"1":"Marcus Eriksen","2":"Marcus"},{"1":"Bilson","2":"Bilson"},{"1":"Marvin Eriksen","2":"Marvin"},{"1":"Judy Eriksen","2":"Judy"},{"1":"Trudy","2":"Trudy"},{"1":"Scooter","2":"Scooter"},{"1":"Stuart Bowers","2":"Stuart"},{"1":"Gary Blauman","2":"Gary"},{"1":"Claudia Bowers","2":"Claudia"},{"1":"Brad Morris","2":"Brad"},{"1":"James Stinson","2":"James"},{"1":"Loretta Stinson","2":"Loretta"},{"1":"Loretta Stinson","2":"Loretta"},{"1":"Virginia Mosby","2":"Virginia"},{"1":"Alfred Mosby","2":"Alfred"},{"1":"Hammond Druthers","2":"Hammond"},{"1":"Gael","2":"Gael"},{"1":"Stella Zinman","2":"Stella"},{"1":"Abby","2":"Abby"},{"1":"Lucy Zinman","2":"Lucy"},{"1":"Arthur Hobbs","2":"Arthur"},{"1":"Alan Thicke","2":"Alan"},{"1":"Meg","2":"Meg"},{"1":"Punchy","2":"Punchy"},{"1":"Simon Tremblay","2":"Simon"},{"1":"Randy Wharmpess","2":"Randy"},{"1":"Tony Grafanello","2":"Tony"},{"1":"Karen","2":"Karen"},{"1":"Robin Scherbatsky Sr.","2":"Robin"},{"1":"Robin Scherbatsky Sr.","2":"Robin"},{"1":"Mrs. Matsen","2":"Mrs."},{"1":"Don Frank","2":"Don"},{"1":"Mickey Aldrin","2":"Mickey"},{"1":"Tim Gunn","2":"Tim"},{"1":"Jim Nantz","2":"Jim"},{"1":"Cindy","2":"Cindy"},{"1":"Nora","2":"Nora"},{"1":"George Van Smoot/The Captain","2":"George"},{"1":"Becky","2":"Becky"},{"1":"Zoey Pierson","2":"Zoey"},{"1":"Nick Podarutti","2":"Nick"},{"1":"Jerome Whittaker","2":"Jerome"},{"1":"Sam Gibbs","2":"Sam"},{"1":"Patrice","2":"Patrice"},{"1":"Quinn Garvey","2":"Quinn"},{"1":"Kevin Venkataraghavan","2":"Kevin"},{"1":"Garrison Cootes","2":"Garrison"},{"1":"Dr. Sonya","2":"Sonya"},{"1":"Marvin W. Eriksen","2":"Marvin"},{"1":"Marvin W. Eriksen","2":"Marvin"},{"1":"Marvin W. Eriksen","2":"Marvin"},{"1":"Marvin W. Eriksen","2":"Marvin"},{"1":"Jeanette Peterson","2":"Jeanette"},{"1":"Louis","2":"Louis"},{"1":"William Zabka","2":"William"},{"1":"Bernice","2":"Bernice"},{"1":"Curtis","2":"Curtis"},{"1":"Daphne","2":"Daphne"},{"1":"Linus","2":"Linus"},{"1":"Darren","2":"Darren"},{"1":"Genevieve Scherbatsky","2":"Genevieve"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
 </div>
 </div>
 </div>
 
 <img src="images/hertie_logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p>Quanteda</p>
-</div>
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
-<div id="ref-MACANOVIC2022102784" class="csl-entry" role="doc-biblioentry">
-Macanovic, Ana. 2022. <span>“Text Mining for Social Science – the State and the Future of Computational Text Analysis in Sociology.”</span> <em>Social Science Research</em> 108: 102784. https://doi.org/<a href="https://doi.org/10.1016/j.ssresearch.2022.102784">https://doi.org/10.1016/j.ssresearch.2022.102784</a>.
-</div>
 </div>
 </section>
     </div>

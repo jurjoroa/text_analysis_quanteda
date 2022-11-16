@@ -250,7 +250,7 @@ dfm_general_characters <- toks_himym_characters %>%
 
 ## 08.02.- Generate Wordcloud --------------------------------------------------
 
-png("images/wordcloud_princ.png", width = 50, height = 50, units='mm', res = 500)
+#png("images/wordcloud_princ.png", width = 50, height = 50, units='mm', res = 500)
 
 textplot_wordcloud(dfm_general_characters, 
                    rotation = 0.25,
@@ -259,7 +259,7 @@ textplot_wordcloud(dfm_general_characters,
                    color = brewer.pal(11, "RdBu"))
 #RColorBrewer::display.brewer.all()
 
-dev.off()
+#dev.off()
 
 # 09.- Wordcloud of SECONDARY characters that appears in HIMYM------------------
 
@@ -283,17 +283,18 @@ dfm_general_sec_characters <- toks_himym_sec_characters %>%
 ## 09.02.- Generate Wordcloud --------------------------------------------------
 
 
-#png("images/distance.png", width = 300, height = 300, units='mm', res = 500)
+#png("images/wordcloud_sec.png", width = 50, height = 50, units='mm', res = 500)
+
 
 textplot_wordcloud(dfm_general_sec_characters, 
                    random_order = FALSE, 
                    rotation = 0.25,
-                   #comparison = TRUE,
+                   min_size = 1, max_size =5,
                    labelsize = 1.5,
                    min_count = 1, #Minimum frequency
                    color = RColorBrewer::brewer.pal(8, "Spectral"))
 
-
+#dev.off()
 
 # 10.- spaCy and spaCyr ------------------
 
@@ -309,6 +310,9 @@ textplot_wordcloud(dfm_general_sec_characters,
 #
 #spacy_initialize(model = "en_core_web_sm")
 
+#sp_parse_doc <- spacy_parse(df_himym_final_doc, tag=TRUE)
+
+
 #We will not run this piece of chunk because it takes 5 minutes. 
 #Here we are just installing from Python dependencies the package and the model.
 
@@ -321,6 +325,8 @@ load("data/df_spaCyr_himym.Rdata")
 
 #Look how the spacyr package separate our sentences into words and classified it with 
 #Verbs, prepositions, Adverbs, Adjectives, etc. 
+
+
 head(sp_parse_doc)
 
 ## 10.03.- Filter data by type of word------------------------------------------
@@ -361,6 +367,9 @@ df_general_ADJ <- toks_himym_ADJ %>%
 
 #Because of a function limitation, the maximum comparison that we can do is 8 groups
 
+#png("images/wordcloud_adj.png", width = 200, height = 200, units='mm', res = 500)
+
+
 textplot_wordcloud(df_general_ADJ, 
                    random_order = FALSE, 
                    rotation = 0.25,
@@ -368,7 +377,8 @@ textplot_wordcloud(df_general_ADJ,
                    labelsize = 1.5, 
                    min_count = 1, #Minimum frequency
                    color = ggsci::pal_lancet(palette = "lanonc"))
-#color = RColorBrewer::brewer.pal(10, "Spectral"))
+
+#dev.off()
 
 ## 10.05.- Get frequency of adjectives------------------------------------------
 
@@ -710,7 +720,7 @@ df_sentiment_himym <- convert(dfm_sentiment_himym, "data.frame") %>%
 
 ## 14.06.- Plot total of positive and negative words per season and episode -----
 
-ggplot3 <- ggplot(df_sentiment_himym, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
+ggplot4 <- ggplot(df_sentiment_himym, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
   geom_bar(stat = 'identity', position = position_dodge(), size = 1) + 
   facet_wrap(~ Season_w)+
   scale_fill_manual(values = c("#c6006f", "#004383")) + 
@@ -732,7 +742,7 @@ ggplot3 <- ggplot(df_sentiment_himym, aes(x = Chapter, y = Words, fill = Polarit
                              b = 10,  # Bottom margin
                              l = 10))
 
-ggdraw(ggplot3) + draw_image(obj_img, x = .97, y = .97, 
+ggdraw(ggplot4) + draw_image(obj_img, x = .97, y = .97, 
                              hjust = 1.1, vjust = .7, 
                              width = 0.11, height = 0.1)
 
@@ -766,7 +776,7 @@ df_sentiment_himym_prop <- convert(dfm_sentiment_himym_prop, "data.frame") %>%
 
 #This step is the same as the last one, but here we are taking into account the weights to do a fair comparison
 
-ggplot4 <- ggplot(df_sentiment_himym_prop, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
+ggplot5 <- ggplot(df_sentiment_himym_prop, aes(x = Chapter, y = Words, fill = Polarity, group = Polarity)) + 
   geom_bar(stat = 'identity', position = position_dodge(), size = 1) + 
   facet_wrap(~ Season_w) +
   scale_fill_manual(values = c("#c6006f", "#004383")) + 
@@ -788,7 +798,7 @@ ggplot4 <- ggplot(df_sentiment_himym_prop, aes(x = Chapter, y = Words, fill = Po
                              b = 10,  # Bottom margin
                              l = 10))
 
-ggdraw(ggplot4) + draw_image(obj_img, x = .97, y = .97, 
+ggdraw(ggplot5) + draw_image(obj_img, x = .97, y = .97, 
                              hjust = 1.1, vjust = .7, 
                              width = 0.11, height = 0.1)
 
@@ -813,7 +823,7 @@ df_sentiment_himym_prop_measure <- convert(dfm_sentiment_himym_prop, "data.frame
 ## 14.09.- Plot measure of positivity among season------------------------------
 
 
-ggplot5 <- ggplot(df_sentiment_himym_prop_measure, aes(x = No.overall, y = measure, 
+ggplot6 <- ggplot(df_sentiment_himym_prop_measure, aes(x = No.overall, y = measure, 
                                             color = Season, group = Season)) +
   scale_color_manual(values = brewer.pal(n = 9, name = "Set1"))+
   geom_line(size = 1.5) +
@@ -839,7 +849,7 @@ ggplot5 <- ggplot(df_sentiment_himym_prop_measure, aes(x = No.overall, y = measu
              color = "red", size = 1)
 
 
-ggdraw(ggplot5) + draw_image(obj_img, x = .97, y = .97, 
+ggdraw(ggplot6) + draw_image(obj_img, x = .97, y = .97, 
                              hjust = 1.1, vjust = .7, 
                              width = 0.11, height = 0.1)
 

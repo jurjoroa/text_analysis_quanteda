@@ -3,6 +3,9 @@ hr.rounded {
   border-radius: 5px;
 }
 
+tbody tr:nth-child(odd){
+  background-color: #DCDCDC;
+}
 
 .myimg {
   border-radius: 50%;
