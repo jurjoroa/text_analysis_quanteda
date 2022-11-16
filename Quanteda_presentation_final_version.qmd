@@ -640,7 +640,6 @@ for (x in html_url_all_seasons) {
 ```{r, eval = TRUE}
 #| class-source:  height_auto
 #| classes:  height_auto
-#| code-fold: true
 
 url_himym <- "https://en.wikipedia.org/wiki/List_of_How_I_Met_Your_Mother_episodes"
 
@@ -702,6 +701,148 @@ rmarkdown::paged_table(df_characters_w)
 ```
 :::
 :::
+
+# Data cleaning to wrangle html tables (Information of the TV Show) {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .7em;"}
+
+</br>
+
+::: columns
+::: {.column width="50%"}
+```{r, eval = TRUE}
+#| class-source:  height_auto
+#| classes:  height_auto
+
+
+#We bind the tables with bind_rows
+df_himym <- data.frame(Reduce(bind_rows, l_tables_himym)) 
+
+df_himym_filt <- df_himym %>% filter(str_length(No.overall) < 4)
+
+df_himym_filt_dupl <- df_himym %>% filter(str_length(No.overall) > 4)
+
+#We are doing this particular wrangling to format in the best possible way our tables. 
+
+#Note that we are using stringr to manipulate our characters.
+
+df_himym_filt_dupl_1 <- df_himym_filt_dupl %>% 
+  mutate(No.overall = as.numeric(replace(No.overall, str_length(No.overall) > 4, substr(No.overall, 1, 3))),
+         No..inseason = as.numeric(replace(No..inseason, str_length(No..inseason) > 3, substr(No..inseason, 1, 2))),
+         Prod.code = replace (Prod.code, str_length(Prod.code) > 3, substr(Prod.code, 1, 6)))
+
+df_himym_filt_dupl_2 <- df_himym_filt_dupl %>% 
+  mutate(No.overall = as.numeric(replace(No.overall, str_length(No.overall) > 4, substr(No.overall, 4, 6))),
+         No..inseason = as.numeric(replace(No..inseason, str_length(No..inseason) > 3, substr(No..inseason, 3, 4))),
+         Title = replace(Title, Title == "\"The Magician's Code\"", "\"The Magician's Code Part 2\""),
+         Title = replace(Title, Title == "\"The Final Page\"", "\"The Final Page Part 2\""),
+         Title = replace(Title, Title == "\"Last Forever\"" , "\"Last Forever Part 2\"" ),
+         Prod.code = replace(Prod.code, str_length(Prod.code) > 3, substr(Prod.code, 7, 12)))
+
+df_himym_final <- bind_rows(df_himym_filt, 
+                            df_himym_filt_dupl_1, 
+                            df_himym_filt_dupl_2) %>% 
+  arrange(No.overall, No..inseason) %>% 
+  mutate(year = str_extract(Original.air.date, '[0-9]{4}+'),
+         Season = as.numeric(stringr::str_extract(Prod.code, "^.{1}"))) %>% 
+  rename(Chapter = No..inseason)
+
+df_himym_final$US.viewers.millions. <- as.numeric(str_replace_all(df_himym_final$US.viewers.millions., "\\[[0-9]+\\]", ""))
+
+```
+
+:::
+
+::: {.column width="50%"}
+
+-   🎛  Load TV scripts and merge tables
+
+
+```{r, eval = FALSE}
+#| class-source:  height_auto
+#| classes:  height_auto
+#| code-fold: true
+
+df_texts_himym <- readtext::readtext("texts/how-i-met-your-mother/*.txt")
+
+v_season <- as.numeric(stringr::str_extract(df_texts_himym$doc_id, "\\d+"))
+
+v_chapter <- as.numeric(stringi::stri_extract_last_regex(df_texts_himym$doc_id, "[0-9]+"))
+
+df_texts_himym_w <- df_texts_himym %>% mutate(Season = v_season, Chapter = v_chapter)
+
+df_himym_final_doc <- full_join(as.data.frame(df_texts_himym_w), df_himym_final, by = c("Season", "Chapter")) %>% 
+  mutate(Season_w = paste("Season", Season),
+         Title_season = paste0(Title, " S", Season, " EP", Chapter))
+
+df_himym_final_doc
+
+rmarkdown::paged_table(df_himym_final_doc)
+```
+
+```{r, eval = TRUE}
+#| class-source:  height_auto
+#| classes:  height_auto
+
+rmarkdown::paged_table(df_himym_final_doc)
+```
+:::
+:::
+
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: 1.7em;"}
+
+# Quanteda {auto-animate="true" auto-animate-easing="ease-in-out" background="radial-gradient( circle farthest-corner at 21.3% 26.5%,  rgba(47,181,227,1) 0%, rgba(155,208,237,1) 61.4% )" style="text-align: left; font-size: .8em;"}
+
+</br>
+
+Look our corpus, it's divided into types, tokens and even sentences. 
+
+::: columns
+::: {.column width="50%"}
+```{r, eval = TRUE}
+#| class-source:  height_auto
+#| classes:  height_auto
+
+corp_himym <- corpus(df_himym_final_doc)  #Build a new corpus from the texts
+
+docnames(corp_himym) <- df_himym_final_doc$Title
+
+summary(corp_himym, n = 15)
+
+```
+
+:::
+
+::: {.column width="50%"}
+
+-  🥽 Second step: Convert corpus into tokens and wrangle it. Look our tokenization, we separate our text into words. Amazing!
+
+
+```{r, eval = FALSE}
+#| class-source:  height_auto
+#| classes:  height_auto
+
+corp_himym_stat <- corp_himym
+
+docnames(corp_himym_stat) <- df_himym_final_doc$Title_season
+
+
+corp_himym_s1_simil <- corpus_subset(corp_himym_stat, Season == 1) #We want to analyze just the first season
+
+
+
+toks_himym_s1 <- tokens(corp_himym_s1_simil, #corpus from all the episodes from the first season
+                        remove_punct = TRUE, #Remove punctuation of our texts
+                        remove_separators = TRUE, #Remove separators of our texts
+                        remove_numbers = TRUE, #Remove numbers of our texts
+                        remove_symbols = TRUE) %>% #Remove symbols of our texts
+  tokens_remove(stopwords("english")) #Remove stop words of our texts
+
+toks_himym_s1
+```
+
+:::
+:::
+
 
 
 
