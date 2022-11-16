@@ -33,6 +33,9 @@ The material in this repository is made available under the [MIT license](http:/
 
 ## Statement of contributions
 
-**Simon Munzert** prepared the practice material and post-processed the recording.
+**Jorge Roa** prepared the code, programed the presentation and prepared the markdown of the code.
 
-**Kermit the Frog** prepared the presentation slides and recording. He also provided an example to the practice material.
+**Augusto Fonseca** Checked in detail bugs in the code; suggested new piece of codes; prepared the practice material for the repo; he prepocessed the video and edit it. 
+
+**Alexander Kraess** Checked in detail bugs in the code; suggested new piece of codes; prepared the practice material for the repo; he coordinate our meetings and logistics of the team
+
