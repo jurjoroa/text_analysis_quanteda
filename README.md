@@ -1,4 +1,4 @@
-# Working with dplyr
+# Text analysis with quanteda
 
 
 ## Summary
@@ -16,11 +16,11 @@ The goals of this session are to (1) equip you with conceptual knowledge about t
 
 ## Instructors
 
-🥋 Jorge Roa [GitHub](https://en.wikipedia.org/wiki/Kermit_the_Frog) | [LinkedIn](https://en.wikipedia.org/wiki/Kermit_the_Frog) | [Twitter](https://en.wikipedia.org/wiki/Kermit_the_Frog)
+🥋 Jorge Roa [GitHub](https://github.com/jurjoroa) | [LinkedIn](https://www.linkedin.com/in/jorge-roac) | [Twitter](https://twitter.com/jorgeroac)
 
 🥋 Augusto Fonseca [Email](cesaraccf@gmail.com) 
 
-🥋 Alexander Kraess [Email](https://en.wikipedia.org/wiki/Kermit_the_Frog)
+🥋 Alexander Kraess [Email](alexander.kraess@sciencespo.fr)
 
 ## Further resources
 
